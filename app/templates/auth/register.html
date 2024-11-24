@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %} NOC-注册 {% endblock title %}
+
+{% block page_content %}
+<div class="row justify-content-center align-items-center" >
+  <div class="col-lg-6 col-xs-8">
+    <h1 class="mb-3 fs-2">注册-Register</h1>
+    <form method="post" id="register-form" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="form-floating mb-3">
+        {% if form.errors.get('username') %}
+          {{ form.username(class="form-control is-invalid", placeholder="Username") }}
+          {{ form.username.label() }}
+          <div class="invalid-feedback">
+            {{ '<br/>'.join(form.errors.get('username'))|safe }}
+          </div>
+        {% else %}
+          {{ form.username(class="form-control", placeholder="Username") }}
+          {{ form.username.label() }}
+        {% endif %}
+      </div>
+      <div class="form-floating mb-3">
+        {% set email_error =  form.errors.get('email') %}
+        {% if email_error %}
+          {# 每次注册失败浏览器刷新会保留表单数据，可以设置input字段 value='' #}
+          {# eg: form.email(class="form-control is-invalid", placeholder="Email", value='') #}
+          {{ form.email(class="form-control is-invalid", placeholder="Email") }}
+          {{ form.email.label() }}
+          <div class="invalid-feedback">
+            {{ '<br/>'.join(email_error)|safe }}
+          </div>
+        {% else %}
+          {{ form.email(class="form-control", placeholder="Email") }}
+          {{ form.email.label() }}
+        {% endif %}
+      </div>
+      <div class="form-floating mb-3">
+        {% set password_error =  form.errors.get('password') %}
+        {% if password_error %}
+          {{ form.password(class="form-control is-invalid", placeholder="Confirm Password") }}
+          {{ form.password.label() }}
+          <div class="invalid-feedback">
+            {{ '<br/>'.join(password_error)|safe }}
+          </div>
+        {% else %}
+          {{ form.password2(class="form-control", placeholder="Confirm Password") }}
+          {{ form.password2.label() }}
+        {% endif %}
+      </div>
+      <div class="form-floating mb-3">
+        {% set password2_error =  form.errors.get('password2') %}
+        {% if password2_error %}
+          {{ form.password2(class="form-control is-invalid", placeholder="Confirm Password") }}
+          {{ form.password2.label() }}
+          <div class="invalid-feedback">
+            {{ ''.join(password2_error) }}
+          </div>
+        {% else %}
+          {{ form.password2(class="form-control", placeholder="Confirm Password") }}
+          {{ form.password2.label() }}
+        {% endif %}
+      </div>
+      <div>
+        {{ form.submit(class="btn btn-primary") }}
+        <div class="spinner-border spinner-border-sm visually-hidden" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="is-invalid" style="display:inline"></div>
+        <div class="invalid-feedback" id="value-confirm" style="display:inline;visibility:hidden">所有项目必须填写，不能有空值</div>
+      </div>
+    </form>
+    <div class="mt-3">
+        <div>已有账号？
+          <a class="text-decoration-underline text-primary" style="display:inline" href="{{ url_for('auth._login', _external=True) }}">现在登录</a>
+        </div>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    !function(){
+      let form = document.querySelector('#register-form')
+      let check_value = (val) => {
+        return val.value
+      }
+      let confirm = document.querySelector('#value-confirm')
+      form.addEventListener('submit', (e)=>{
+        let fields = document.querySelectorAll('.form-floating input')
+        fields = Object.values(fields)
+        if (!fields.every(check_value)) {
+          e.preventDefault()
+          e.stopPropagation()
+          confirm.style.visibility = 'visible'
+        } else {
+          confirm.style.visibility = 'hidden'
+        }
+      })
+    }()
+  </script>
+{% endblock %}
