@@ -1,11 +1,11 @@
 from flask import render_template, url_for, redirect
+from flask_login import login_user, logout_user, login_required
 
 from app import db
 from app.auth import auth
 from app.auth.forms import *
 from app.models import User
 from app.utils import my_flash
-from flask_login import login_user, logout_user, login_required
 
 
 @auth.route('/')
@@ -36,7 +36,6 @@ def _login():
 @auth.route('/register', methods = ['GET', 'POST'])
 def _register():
     form = RegisterForm()
-    my_flash('注册成功', 'success')
     if form.validate_on_submit():
         name = form.username.data
         mail = form.email.data
