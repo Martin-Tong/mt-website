@@ -5,5 +5,4 @@ from flask_login import current_user
 
 @index.route('/')
 def homepage():
-    print(current_user.__dir__())
     return render_template('homepage.html')
