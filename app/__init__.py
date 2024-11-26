@@ -11,7 +11,7 @@ db: SQLAlchemy = SQLAlchemy()
 mail: Mail = Mail()
 moment: Moment = Moment()
 login_manager: LoginManager = LoginManager()
-login_manager.login_view = 'auth.login'
+login_manager.login_view = 'auth._login'
 
 
 def create_app(_config='default'):

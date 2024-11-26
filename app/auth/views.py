@@ -1,12 +1,13 @@
 from flask import render_template, url_for, redirect
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 from app import db
 from app.auth import auth
 from app.auth.forms import *
+from app.index import index
 from app.models import User
 from app.utils import my_flash
-
+from app.email import send_mail
 
 @auth.route('/')
 @login_required
@@ -44,7 +45,9 @@ def _register():
         user = User(username = name, email = mail, password = passwd)
         db.session.add(user)
         db.session.commit()
-        my_flash('注册成功', 'success')
+        token = user.generate_validate_token()
+        send_mail(mail, '请确认你在NOC注册的邮箱地址', 'email/confirm', token = token, user = user)
+        my_flash('注册成功，一个确认邮件已经发到你的注册邮箱地址，请前往确认', 'success')
         return redirect(url_for('._login'))
     return render_template('auth/register.html', form = form)
 
@@ -53,6 +56,19 @@ def _register():
 def _logout():
     logout_user()
     my_flash('用户已登出', 'success')
+    return redirect(url_for('index.homepage'))
+
+
+@auth.route('/confirm/<token>')
+@login_required
+def _confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('index.homepage'))
+    if current_user.confirm(token):
+        db.session.commit()
+        my_flash('邮箱验证成功', 'success')
+    else:
+        my_flash('链接已过期或链接不一致，请重新发起验证', 'danger')
     return redirect(url_for('index.homepage'))
 
 

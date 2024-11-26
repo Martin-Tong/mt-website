@@ -44,8 +44,8 @@
             {{ '<br/>'.join(password_error)|safe }}
           </div>
         {% else %}
-          {{ form.password2(class="form-control", placeholder="Confirm Password") }}
-          {{ form.password2.label() }}
+          {{ form.password(class="form-control", placeholder="Confirm Password") }}
+          {{ form.password.label() }}
         {% endif %}
       </div>
       <div class="form-floating mb-3">
@@ -62,7 +62,7 @@
         {% endif %}
       </div>
       <div>
-        {{ form.submit(class="btn btn-primary") }}
+        {{ form.submit(class="btn btn-outline-primary") }}
         <div class="spinner-border spinner-border-sm visually-hidden" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>

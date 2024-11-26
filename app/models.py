@@ -1,8 +1,8 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from app import db, login_manager
-
+from flask import current_app
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -11,6 +11,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique = True, index = True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    confirmed = db.Column(db.Boolean, default = False)
 
     @property
     def password(self):
@@ -22,6 +23,23 @@ class User(UserMixin, db.Model):
 
     def validate_password(self, passwd):
         return check_password_hash(self.password_hash, passwd)
+
+    def generate_validate_token(self):
+        secret_key = current_app.config['SECRET_KEY']
+        serializer = URLSafeTimedSerializer(secret_key)
+        return serializer.dumps({'user': self.id}, 'register_confirmation')
+
+    def confirm(self, token):
+        serializer= URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        try:
+            data = serializer.loads(token, 3600, salt='register_confirmation')
+        except SignatureExpired as e:
+            return False
+        if data['user'] != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -38,3 +56,6 @@ class Role(db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+a=URLSafeTimedSerializer('test')
+print(a.dumps({'name':1}))

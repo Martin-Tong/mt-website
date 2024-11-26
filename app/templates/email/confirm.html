@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>确认邮件-NOC</title>
+</head>
+<body>
+  <h3>{{ user.username }} 你好！</h3>
+
+  <p>欢迎来到NOC&lt;Not Only Code&gt;, 感谢你的注册！</p>
+
+  <p>为了验证你的邮箱地址以便后续相关信息的接收，请点击以下地址进行验证（如已验证请忽略）：</p>
+
+  <a href=" {{ url_for('auth._confirm', token = token,  _external=True) }}">确认链接</a>
+
+  <p>请不要回复此邮件，谢谢！</p>
+</body>
+</html>
