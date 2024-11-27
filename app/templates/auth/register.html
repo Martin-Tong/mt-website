@@ -63,7 +63,7 @@
       </div>
       <div>
         {{ form.submit(class="btn btn-outline-primary") }}
-        <div class="spinner-border spinner-border-sm visually-hidden" role="status">
+        <div class="spinner-border spinner-border-sm visually-hidden mx-2" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
         <div class="is-invalid" style="display:inline"></div>
@@ -82,8 +82,9 @@
 {% block scripts %}
   {{ super() }}
   <script>
-    !function(){
+    (function(){
       let form = document.querySelector('#register-form')
+      let spinner = document.querySelector('[role="status"]')
       let check_value = (val) => {
         return val.value
       }
@@ -97,8 +98,9 @@
           confirm.style.visibility = 'visible'
         } else {
           confirm.style.visibility = 'hidden'
+          spinner.classList.remove('visually-hidden')
         }
       })
-    }()
+    })()
   </script>
 {% endblock %}

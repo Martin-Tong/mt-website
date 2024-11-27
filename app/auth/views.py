@@ -4,7 +4,6 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from app.auth import auth
 from app.auth.forms import *
-from app.index import index
 from app.models import User
 from app.utils import my_flash
 from app.email import send_mail

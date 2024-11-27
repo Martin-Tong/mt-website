@@ -44,7 +44,7 @@ class DevConfig(Config):
 
     DEBUG = True
     SECRET_KEY = 'hard to guess string'
-    MAIL_ADMIN = os.environ.get('MAIL_ADMIN', 'NOC Admin <1933981377@qq.com>')
+    MAIL_ADMIN = os.environ.get('MAIL_ADMIN', '1933981377@qq.com')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI') or 'sqlite:///'+os.path.join(basedir, 'dev-database.sqlite')
 
 class ProductConfig(Config):
