@@ -1,6 +1,5 @@
-(() => {
+!(() => {
 'use strict'
-
 let check_storage_useful = (() => {
     return (type) => {
         let x = '__test_data__'

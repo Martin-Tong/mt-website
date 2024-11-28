@@ -8,10 +8,11 @@ from app.models import User
 from app.utils import my_flash
 from app.email import send_mail
 
-@auth.route('/')
+@auth.route('/about/<user_name>')
 @login_required
-def _aboutme():
-    return render_template('auth/aboutme.html')
+def _aboutme(user_name):
+    user = User.query.filter_by(username = user_name).first_or_404('未查询到用户')
+    return render_template('auth/aboutme.html', user = user)
 
 @auth.route('/login', methods = ['GET', 'POST'])
 def _login():
