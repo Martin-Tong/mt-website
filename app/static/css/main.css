@@ -1,3 +1,5 @@
+@import "_stander.css";
+
 #theme-control button {
     position: relative;
     width: 66px;
@@ -5,6 +7,7 @@
     margin-right: 10px;
     background-color: lightgray;
     border-radius: 12px;
+    top: -2px;
 }
 #control-outer {
     position: absolute;
@@ -52,4 +55,34 @@
 }
 [data-bs-theme=dark] #scheme-sun, [data-bs-theme=light] #scheme-moon {
     opacity: 1
+}
+#gotop {
+    position:fixed;
+    background-color:var(--bs-dark-bg-subtle);
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    bottom: 3rem;
+    right: 1.8rem;
+    border: 0;
+    transition: all 0s ease;
+}
+#gotop::after {
+    content:'';
+    display: inline-block;
+    mask: var(--arrow-top-icon) 50% / 2rem 2rem no-repeat;
+    height: 100%;
+    width: 100%;
+    background-color:var(--bs-body-color);
+}
+#gotop:hover {
+    background-color:var(--bs-dark-border-subtle)
+}
+#icp {
+    position: fixed;
+    background-color: var(--bs-body-bg);
+    bottom: 0
+}
+#icp p {
+    margin-top: 1em
 }

@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import config as configmap
 
 #bootstrap: Bootstrap = Bootstrap()
-db: SQLAlchemy = SQLAlchemy()
+db = SQLAlchemy()
 mail: Mail = Mail()
 moment: Moment = Moment()
 login_manager: LoginManager = LoginManager()
@@ -37,5 +37,8 @@ def create_app(_config='default'):
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix = '/auth')
+
+    from .post import post as post_blueprint
+    app.register_blueprint(post_blueprint, url_prefix = '/post')
 
     return app

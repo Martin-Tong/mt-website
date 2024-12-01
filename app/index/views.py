@@ -1,9 +1,7 @@
-#from werkzeug.datastructures import MultiDict
 from flask import render_template, make_response
 
 from app.index import index
-from app.models import Permission
-
+from app.models import Permission, Post, Category
 
 # @index.after_app_request
 # def remove_server_header(response):
@@ -16,6 +14,12 @@ def define_permission_context():
 
 @index.route('/')
 def homepage():
-    a= make_response(render_template('index/homepage.html'))
-    #a.headers.update(MultiDict([('server', 'test')]))
+    posts = Post.query.all()
+    categories = Category.query.all()
+    _struct = {}
+    for i in categories:
+        _struct[i.name] =[l.title for l in i.posts.all()]
+    #_struct = json.dumps(_struct)
+    a= make_response(render_template('index/homepage.html', posts = posts, categories = categories, _struct = _struct))
+
     return a

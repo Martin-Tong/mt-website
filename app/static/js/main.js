@@ -1,3 +1,5 @@
+import {gotop_arrow} from './noc.js'
+
 !(() => {
 'use strict'
 let check_storage_useful = (() => {
@@ -30,9 +32,11 @@ window.addEventListener('DOMContentLoaded', () => {
     let dark = window.matchMedia('(prefers-color-scheme:dark)').matches
     let controller = document.querySelector('#theme-control button')
     if (check_storage_useful('localStorage')) {
-        localStorage.setItem('scheme', dark?'dark':'light')
+        if (!localStorage.getItem('scheme')) {
+            localStorage.setItem('scheme', dark?'dark':'light')
+        }
     }
-    if (dark) {
+    if (localStorage.getItem('scheme') || dark) {
         change_theme('dark')
     } else {
         change_theme('light')
@@ -42,5 +46,6 @@ window.addEventListener('DOMContentLoaded', () => {
         _scheme == 'dark'?change_theme('light'): change_theme('dark')
     })
 })
-
 })()
+
+gotop_arrow()

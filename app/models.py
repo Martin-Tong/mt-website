@@ -1,9 +1,21 @@
+import typing
+from datetime import datetime
+import re
+import bleach
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from markdown import markdown
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login_manager
+
+if typing.TYPE_CHECKING:
+    import sqlalchemy as db
+    # _db_type = typing.TypeVar('_db_type', bound=[
+    #     typing.Optional[SQLAlchemy]
+    # ])
+    #db:_db_type
 
 
 class User(UserMixin, db.Model):
@@ -14,6 +26,10 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     confirmed = db.Column(db.Boolean, default = False)
+    posts = db.relationship('Post', backref='author', lazy = 'dynamic')
+    about_me = db.Column(db.String(128), nullable=True)
+    register_date = db.Column(db.DateTime, default = datetime.today())
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -43,7 +59,7 @@ class User(UserMixin, db.Model):
         serializer= URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         try:
             data = serializer.loads(token, 3600, salt='register_confirmation')
-        except SignatureExpired as e:
+        except SignatureExpired:
             return False
         if data['user'] != self.id:
             return False
@@ -80,6 +96,7 @@ class Role(db.Model):
         if not self.permissions:
             self.permissions = 0
 
+    #手动初始化所有用户角色
     @staticmethod
     def insert_roles():
         roles = {
@@ -117,12 +134,54 @@ class Role(db.Model):
     def __repr__(self):
         return f'<Role {self.name}>'
 
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True)
+    posts = db.relationship('Post', backref='category', lazy='dynamic')
+
+    @staticmethod
+    def insert_categories(data:str|list[str]) -> None:
+        if type(data) == str:
+            data = [data]
+        for i in data:
+            if not Category.query.filter_by(name = i).first():
+                db.session.add(Category(name = i))
+        db.session.commit()
+
+    def __repr__(self):
+        return f'<Category {self.name}>'
+
 class Permission:
     COMMENT = 1 #评论权限
     FOLLOW = 2 #关注他人权限
     PUBLIC = 4 #发表文章权限
     SUPERVISOR = 8 #协助管理权限
     ADMIN = 16 #管理权限
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(64), index = True)
+    body_md = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    date = db.Column(db.DateTime, index = True, default = datetime.today())
+    last_modify = db.Column(db.DateTime)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    stars = db.Column(db.Integer, default=0)
+
+    @staticmethod
+    def on_change_body_md(target, value, oldvalue, initiator):
+        safe_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
+                        'h1', 'h2', 'h3', 'p']
+        target.body_html = bleach.Linker(url_re=re.compile('^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'),
+                                         email_re=re.compile('^([\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+)$'),
+                                         parse_email=True, skip_tags={'pre', 'code'}).linkify(bleach.clean(markdown(value, output_format='html'),
+                                                                                                           tags = safe_tags, strip=True))
+
+db.event.listen(Post.body_md, 'set', Post.on_change_body_md)
 
 @login_manager.user_loader
 def load_user(user_id):

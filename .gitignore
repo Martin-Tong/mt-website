@@ -1,2 +1,4 @@
 /.venv/
 /dev-database.sqlite
+/faker_data.py
+/requirement/dev.txt

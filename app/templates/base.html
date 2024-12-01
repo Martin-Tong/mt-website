@@ -7,14 +7,15 @@
         <title>{% block title %}NOC-Not Only Code{% endblock title %}</title>
 
         {%- block metas %}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta charset="UTF-8">
         <link rel="icon" href="{{ url_for('static', filename='static_images/favicon.ico') }}">
         {%- endblock metas %}
 
         {%- block styles %}
         <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script src="{{ url_for('static', filename = 'js/main.js', _external=True) }}" blocking="render" async></script>
+<!--        <script src="{{ url_for('static', filename = 'js/noc.js', _external=True) }}" type="module"></script>-->
+        <script src="{{ url_for('static', filename = 'js/main.js', _external=True) }}" type="module"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css', _external=True) }}">
         {%- endblock styles %}
 
@@ -24,7 +25,7 @@
     {% block body -%}
 
         {% block navbar %}
-        <nav class="navbar navbar-expand-lg bg-body-subtle mb-3" >
+        <nav class="navbar navbar-expand-lg bg-body-subtle mb-3 user-select-none" style="line-height:2em">
             <div class="container-fluid">
                 <a class="navbar-brand" href="javascript:void(0)">NOC</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,23 +51,25 @@
                         </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/">主页</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                            <a class="nav-link" href="/">主页</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
+                    <div class="d-none d-lg-block">
                     <div id="theme-control">
-                        <button class="btn" type="button" title="">
+                        <button class="btn" type="button" title="主题颜色">
                             <span id="control-outer">
                                 <span id="control-inner">
                                 {% include 'components/sun-moon.html' %}
                                 </span>
                             </span>
                         </button>
+                    </div>
                     </div>
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -78,18 +81,20 @@
         {%- endblock navbar %}
 
         {% block content -%}
-        <div class="container">
+        <div class="container" id="container">
             {% for message in get_flashed_messages(True) %}
             <div class="alert alert-{{ message[0] }} alert-dismissible fade show" role="alert">
                 <strong>{{ message[1] }}!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
-
+            <button class="d-none d-lg-block bd-body-subtle" id="gotop"></button>
 
             {% block page_content %}{% endblock %}
         </div>
         {%- endblock content %}
+
+        {% block footer -%}{%- endblock footer %}
 
         {% block scripts %}
         <script src="https://s4.zstatic.net/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

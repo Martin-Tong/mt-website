@@ -2,109 +2,62 @@
 
 {% block page_content %}
 <div class="row justify-content-center">
-    <div class="col-lg-3">
-        <div>
-            用 let 声明的变量的作用域是最靠近并包含 let 声明的以下花括号闭合语法结构的一个：
-
-块语句
-switch 语句
-try...catch 语句
-let 位于其开头的 for 语句之一的主体
-函数主体
-类静态初始化块
-如果不是以上这些情况则是：
-
-当代码以模块模式运行时，作用域是当前模块。
-当代码以脚本模式运行时，作用域是全局作用域。
-相较于 var，let 声明有以下不同点：
-
-let 声明的作用域是块或函数。
-
-let 声明的变量只能在执行到声明所在的位置之后才能被访问（参见暂时性死区）。因此，let 声明通常被视为是非提升的。
-
-let 声明在脚本的顶级作用域上声明变量时不会在全局对象上创建属性。
-
-let 声明的变量不能被同一个作用域中的任何其他声明重复声明。
-
-let 是声明，而不是语句的开头。这意味着，你不能将单独的 let 声明当做块的主体使用（因为这样做会让变量无法被访问）。
+    <div class="col-lg-2">
+        <div class="position-sticky" style="top:2em">
+            <ul style="list-style:none;padding:0" class="text-center">
+                {% for i in categories %}
+                <li>{{i.name}}<p class="fw-lighter" style="display:inline;font-size:0.8em">共{{i.posts.count()}}篇</p></li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-6 position-sticky">
         <div class="row">
-            用 let 声明的变量的作用域是最靠近并包含 let 声明的以下花括号闭合语法结构的一个：
-
-块语句
-switch 语句
-try...catch 语句
-let 位于其开头的 for 语句之一的主体
-函数主体
-类静态初始化块
-如果不是以上这些情况则是：
-
-当代码以模块模式运行时，作用域是当前模块。
-当代码以脚本模式运行时，作用域是全局作用域。
-相较于 var，let 声明有以下不同点：
-
-let 声明的作用域是块或函数。
-
-let 声明的变量只能在执行到声明所在的位置之后才能被访问（参见暂时性死区）。因此，let 声明通常被视为是非提升的。
-
-let 声明在脚本的顶级作用域上声明变量时不会在全局对象上创建属性。
-
-let 声明的变量不能被同一个作用域中的任何其他声明重复声明。
-
-let 是声明，而不是语句的开头。这意味着，你不能将单独的 let 声明当做块的主体使用（因为这样做会让变量无法被访问）。
-            用 let 声明的变量的作用域是最靠近并包含 let 声明的以下花括号闭合语法结构的一个：
-
-块语句
-switch 语句
-try...catch 语句
-let 位于其开头的 for 语句之一的主体
-函数主体
-类静态初始化块
-如果不是以上这些情况则是：
-
-当代码以模块模式运行时，作用域是当前模块。
-当代码以脚本模式运行时，作用域是全局作用域。
-相较于 var，let 声明有以下不同点：
-
-let 声明的作用域是块或函数。
-
-let 声明的变量只能在执行到声明所在的位置之后才能被访问（参见暂时性死区）。因此，let 声明通常被视为是非提升的。
-
-let 声明在脚本的顶级作用域上声明变量时不会在全局对象上创建属性。
-
-let 声明的变量不能被同一个作用域中的任何其他声明重复声明。
-
-let 是声明，而不是语句的开头。这意味着，你不能将单独的 let 声明当做块的主体使用（因为这样做会让变量无法被访问）。
+            <ol>
+            {% for post in posts %}
+                <li>{{post.title}}</li>
+            {% endfor %}
+            </ol>
         </div>
     </div>
     <div class="col-lg-3">
         <div >
             用 let 声明的变量的作用域是最靠近并包含 let 声明的以下花括号闭合语法结构的一个：
-
-块语句
-switch 语句
-try...catch 语句
-let 位于其开头的 for 语句之一的主体
-函数主体
-类静态初始化块
-如果不是以上这些情况则是：
-
-当代码以模块模式运行时，作用域是当前模块。
-当代码以脚本模式运行时，作用域是全局作用域。
-相较于 var，let 声明有以下不同点：
-
-let 声明的作用域是块或函数。
-
-let 声明的变量只能在执行到声明所在的位置之后才能被访问（参见暂时性死区）。因此，let 声明通常被视为是非提升的。
-
-let 声明在脚本的顶级作用域上声明变量时不会在全局对象上创建属性。
-
-let 声明的变量不能被同一个作用域中的任何其他声明重复声明。
-
-let 是声明，而不是语句的开头。这意味着，你不能将单独的 let 声明当做块的主体使用（因为这样做会让变量无法被访问）。
+            块语句
+            switch 语句
+            try...catch 语句
+            let 位于其开头的 for 语句之一的主体
+            函数主体
+            类静态初始化块
+            如果不是以上这些情况则是：
+            当代码以模块模式运行时，作用域是当前模块。
+            当代码以脚本模式运行时，作用域是全局作用域。
+            相较于 var，let 声明有以下不同点：
+            let 声明的作用域是块或函数。
+            let 声明的变量只能在执行到声明所在的位置之后才能被访问（参见暂时性死区）。因此，let 声明通常被视为是非提升的。
+            let 声明在脚本的顶级作用域上声明变量时不会在全局对象上创建属性。
+            let 声明的变量不能被同一个作用域中的任何其他声明重复声明。
+            let 是声明，而不是语句的开头。这意味着，你不能将单独的 let 声明当做块的主体使用（因为这样做会让变量无法被访问）。
         </div>
     </div>
 </div>
 {% endblock %}
+
+{% block footer %}
+    <div id="icp" class="container-fluid">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-6 col-xs-8">
+                <p class="text-center fw-lighter" style="font-size: 0.8em">本网站已完成备案，备案号<a href="https://beian.miit.gov.cn">豫ICP备2024100525号</a></p>
+            </div>
+        </div>
+    </div>
+    <style>
+        #container {
+            margin-bottom: 3em
+        }
+    </style>
+    <script id="index-posts-data">
+        var index_posts_data = JSON.parse(JSON.stringify({{_struct|safe|trim}}))
+    </script>
+{% endblock %}
+
