@@ -1,4 +1,17 @@
 :root {
     --arrow-top-icon: url("data:image/svg+xml;charset=utf-8,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m20.836 15.914 1.078-1.078L12.54 5.46 12 4.945l-.54.516-9.374 9.375 1.078 1.078L12 7.078l8.836 8.836Z' fill='%23FFFCE1'/%3E%3C/svg%3E");
+    --select-body-color: #dee2e6;
+    --select-body-bg: #212529;
 }
 
+[data-bs-theme=dark] {
+    --select-body-color: #212529;
+    --select-body-bg: #fff;
+}
+
+[data-bs-theme=light] {
+    --select-body-color: #dee2e6;
+    --select-body-bg: #212529;
+}
+/*"system-ui", "-apple-system", "BlinkMacSystemFont",*/
+/*"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, "System Default", serif*/

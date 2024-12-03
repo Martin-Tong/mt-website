@@ -1,4 +1,13 @@
 @import "_stander.css";
+@import "bootstrap-icons.css";
+
+body {
+    font-family: bootstrap-icons;
+}
+
+#navbar {
+    height: 8vh;
+}
 
 #theme-control button {
     position: relative;
@@ -62,10 +71,11 @@
     height: 3rem;
     width: 3rem;
     border-radius: 50%;
-    bottom: 3rem;
+    bottom: 5rem;
     right: 1.8rem;
     border: 0;
-    transition: all 0s ease;
+    transition: background-color 0s ease, scale 0.2s ease-out;
+    scale: 0;
 }
 #gotop::after {
     content:'';
@@ -81,8 +91,75 @@
 #icp {
     position: fixed;
     background-color: var(--bs-body-bg);
-    bottom: 0
+    bottom: 0;
+    padding: 1rem;
 }
 #icp p {
-    margin-top: 1em
+    margin: 0
+}
+@media (prefers-color-scheme:dark) {
+    body,#icp,.form-control {
+        background-color: #212529;
+        border-color: #495057;
+    }
+    [data-bs-theme=light] body, [data-bs-theme=light] #icp, [data-bs-theme=light] .form-control{
+        background-color: #fff;
+        border-color: #495057;
+    }
+}
+
+/*发布文章页css*/
+#publish_post #content {
+    display: flex;
+    flex-direction: column-reverse;
+    position: relative;
+}
+#content-controller {
+    position: absolute;
+    width: 16px;
+    right: -26px;
+    bottom: 1rem;
+}
+#content-controller button {
+    padding: 0;
+    margin-bottom: 0.2rem;
+    border: none;
+}
+#flask-pagedown-content {
+    scrollbar-width: none;
+}
+#publish_post #flask-pagedown-content-preview {
+    padding: 0 0.5rem;
+    white-space: normal;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+#content .flask-pagedown {
+    position: sticky;
+    bottom: 3.5rem;
+}
+#post_submit {
+    position: sticky;
+    bottom: 1rem;
+}
+@media (prefers-color-scheme: dark) {
+    #publish_post #category {
+        background-color: #212529;
+        border-color: #495057;
+    }
+    [data-bs-theme=light] #publish_post #category {
+        background-color: #fff;
+        border-color: #495057;
+    }
+}
+::highlight(searchResult) {
+    background-color: var(--select-body-bg);
+    color: var(--select-body-color);
+}
+
+/*文章预览页*/
+#post_category p {
+    display: inline-block;
+    margin:0 0.5rem 0 0;
+    font-size: 0.8rem;
 }

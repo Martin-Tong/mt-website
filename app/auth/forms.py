@@ -8,7 +8,7 @@ from app.models import User
 class LoginForm(FlaskForm):
     name = StringField('用户名/邮箱', [DataRequired(), length(8)])
     password = PasswordField('密码', [DataRequired()])
-    remember_me = BooleanField('记住我（下次自动登录）')
+    remember_me = BooleanField('记住我（下次自动登录）',name='checkbox')
     submit = SubmitField('登录')
 
 class RegisterForm(FlaskForm):

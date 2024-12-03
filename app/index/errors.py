@@ -3,7 +3,6 @@ from app.index import index
 
 @index.app_errorhandler(404)
 def e_404(e):
-    print(dir(e),'\r\n', e.args)
     return render_template('404.html')
 
 @index.app_errorhandler(500)

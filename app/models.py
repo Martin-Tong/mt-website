@@ -6,6 +6,7 @@ from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from markdown import markdown
+from unicodedata import category
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login_manager
@@ -83,6 +84,13 @@ class AnonymousUser(AnonymousUserMixin):
     def is_admin(self):
         return False
 
+class Permission:
+    COMMENT = 1 #评论权限
+    FOLLOW = 2 #关注他人权限
+    PUBLIC = 4 #发表文章权限
+    SUPERVISOR = 8 #协助管理权限
+    ADMIN = 16 #管理权限
+
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key = True)
@@ -140,24 +148,18 @@ class Category(db.Model):
     name = db.Column(db.String(64), index=True)
     posts = db.relationship('Post', backref='category', lazy='dynamic')
 
+    #没有解耦，添加分类需要在category_list中添加后执行命令
+    #同时需要在 app/index/forms.py 中同步修改
     @staticmethod
-    def insert_categories(data:str|list[str]) -> None:
-        if type(data) == str:
-            data = [data]
-        for i in data:
+    def insert_categories() -> None:
+        category_list = ['前端相关', 'Python', 'Nodejs', 'Flask中译']
+        for i in category_list:
             if not Category.query.filter_by(name = i).first():
                 db.session.add(Category(name = i))
         db.session.commit()
 
     def __repr__(self):
         return f'<Category {self.name}>'
-
-class Permission:
-    COMMENT = 1 #评论权限
-    FOLLOW = 2 #关注他人权限
-    PUBLIC = 4 #发表文章权限
-    SUPERVISOR = 8 #协助管理权限
-    ADMIN = 16 #管理权限
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -175,7 +177,7 @@ class Post(db.Model):
     def on_change_body_md(target, value, oldvalue, initiator):
         safe_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p']
+                        'h1', 'h2', 'h3', 'p', 'br']
         target.body_html = bleach.Linker(url_re=re.compile('^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'),
                                          email_re=re.compile('^([\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+)$'),
                                          parse_email=True, skip_tags={'pre', 'code'}).linkify(bleach.clean(markdown(value, output_format='html'),

@@ -13,7 +13,7 @@
     </div>
     <div class="col-lg-6 position-sticky">
         <div class="row">
-            <ol>
+            <ol style="list-style: none">
             {% for post in posts %}
                 <li>{{post.title}}</li>
             {% endfor %}
@@ -48,12 +48,16 @@
         <div class="row justify-content-center align-items-center">
             <div class="col-lg-6 col-xs-8">
                 <p class="text-center fw-lighter" style="font-size: 0.8em">本网站已完成备案，备案号<a href="https://beian.miit.gov.cn">豫ICP备2024100525号</a></p>
+                <p class="text-center fw-lighter">
+                    <img src="{{url_for('static', filename='static_images/beian.png')}}" width="16px" height="16px">
+                    <a href="https://beian.mps.gov.cn/#/query/webSearch?code=33010502012133" rel="noreferrer" target="_blank" style="font-size: 0.8em">浙公网安备33010502012133</a>
+                </p>
             </div>
         </div>
     </div>
     <style>
         #container {
-            margin-bottom: 3em
+            margin-bottom: 4rem
         }
     </style>
     <script id="index-posts-data">

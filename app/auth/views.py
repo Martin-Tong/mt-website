@@ -30,7 +30,7 @@ def _login():
                 my_flash('密码错误', 'danger')
         else:
             my_flash('用户不存在', 'warning')
-        return redirect(url_for('._login'))
+        return redirect(url_for('._login',_method='GET'))
     return render_template('auth/login.html', form = form)
 
 

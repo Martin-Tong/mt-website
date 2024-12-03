@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}NOC-{{ post.title }}{% endblock title %}
+
+{% block page_content %}
+  <div class="row justify-content-center align-items-center " id="post_detail">
+    <div class="col-lg-8 col-xs-10">
+      <div class="mb-3" id="post_body">
+        <div class="mb-3" id="post_title">
+          <h1>{{ post.title }}</h1>
+          <div class="mb-3" id="post_info">
+            <div class="mb-3" id="post_category">
+              <p title="分类">
+                分类:<a class="text-decoration-none text-primary" href="{{ url_for('post.post_category', category=post.category.name, _external=True) }}">
+                {{post.category.name|capitalize|trim}}
+                </a>
+              </p>
+              <p title="作者">
+                作者:
+                <a class="text-decoration-none text-primary" href="{{ url_for('auth._aboutme', user_name=post.author.username, _external=True) }}">
+                  {{ post.author.username|capitalize }}
+                </a>
+              </p>
+              <p title="发布日期">
+                发布日期:&nbsp;{{ moment(post.date).format('LLL')}}
+              </p>
+              <p title="赞赏数">
+                赞赏数:&nbsp;<i class="bi bi-star-fill"></i>&nbsp;{{ post.starts|default(0, True)}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="post_content">
+          {{ post.body_html|safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -24,4 +24,12 @@ function throttle(fn, wait) {
     }
 }
 
-export {debounce, throttle}
+function attach_event(target,event_name, fn) {
+    const _target = document.querySelector(target)
+    _target.addEventListener(event_name, fn)
+    window.addEventListener('unload', () => {
+        _target.removeEventListener(event_name, fn)
+    })
+}
+
+export {debounce, throttle, attach_event}

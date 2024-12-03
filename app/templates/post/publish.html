@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}NOC-发表文章{% endblock title %}
+
+{%block styles%}
+  {{super()}}
+        <script src="{{ url_for('static', filename = 'js/publish_page.js', _external=True) }}" type="module"></script>
+{%endblock%}
+
+{% block page_content %}
+  <div class="row justify-content-center align-items-center mt-5" id="publish_post">
+    <div class="col-lg-8 col-xs-10">
+      <form method="post" id="publish-form" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="form-floating mb-3" id="title">
+          {{ form.title(class="form-control", placeholder="请输入标题") }}
+          {{ form.title.label() }}
+        </div>
+        <div id="select">
+          {{ form.category(class="form-select mb-3", title='文章分类') }}
+        </div>
+        <div class="mb-3" id="content">
+          {{ form.content(class="form-control mb-3", placeholder="请输入文章正文", rows="5", spellcheck='false') }}
+        </div>
+        <div id="post_submit">
+          {{form.submit(class="btn btn-outline-primary")}}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {{ pagedown.include_pagedown() }}
+{% endblock %}
