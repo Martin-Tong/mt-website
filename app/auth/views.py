@@ -1,15 +1,15 @@
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, abort
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app import db
 from app.auth import auth
 from app.auth.forms import *
+from app.email import send_mail
 from app.models import User
 from app.utils import my_flash
-from app.email import send_mail
+
 
 @auth.route('/about/<user_name>')
-@login_required
 def _aboutme(user_name):
     user = User.query.filter_by(username = user_name).first_or_404('未查询到用户')
     return render_template('auth/aboutme.html', user = user)
@@ -71,6 +71,22 @@ def _confirm(token):
         my_flash('链接已过期或链接不一致，请重新发起验证', 'danger')
     return redirect(url_for('index.homepage'))
 
+@auth.route('/edit-profile/<username>', methods = ['GET', 'POST'])
+@login_required
+def edit_profile(username):
+    form = EditProfileForm()
+    user = User.query.filter_by(username = username).first_or_404()
+    if form.validate_on_submit():
+        if not (form.username.data == user.username and form.about_me.data == user.about_me):
+            user.username =form.username.data
+            user.about_me = form.about_me.data
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except Exception as e:
+            abort(500, e)
+        return redirect(url_for('auth._aboutme', user_name = user.username))
+    return render_template('auth/edit_profile.html', user = user, form = form)
 
 def validate_username_or_email(data):
     if data.find('@') > -1:

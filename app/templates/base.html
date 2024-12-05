@@ -21,7 +21,7 @@
     <body {% block body_attribs %}{% endblock body_attribs %}>
     {% block body -%}
         {% block navbar %}
-        <nav class="navbar navbar-expand-lg bg-body-subtle mb-3 user-select-none" id="navbar">
+        <nav class="navbar navbar-expand-lg mb-3 user-select-none p-3 p-lg-4" id="navbar" style="z-index: 1000;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="javascript:void(0)">NOC</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ url_for('auth._aboutme', user_name = current_user.username) }}">关于我</a></li>
                                 <li><a class="dropdown-item" href="#">信息</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('index.publish') }}">发表文章</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('post.publish') }}">发表文章</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for('auth._logout') }}">退出登录</a></li>
                             </ul>
@@ -68,10 +68,13 @@
                         </button>
                     </div>
                     </div>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-primary" type="submit">Search</button>
-                    </form>
+                    {%if current_user.role.name == 'Admin'%}
+                    <div class="navbar-nav">
+                        <div class="nav-item mb-3 mb-lg-0">
+                            <a class="nav-link" target="_blank" href="">后台</a>
+                        </div>
+                    </div>
+                    {%endif%}
                 </div>
             </div>
         </nav>

@@ -11,6 +11,7 @@ class Config:
             self.checkout_attrs(l)
 
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    POSTS_PER_PAGE = os.environ.get('POSTS_PER_PAGE', 10)
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.qq.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 465))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'False').lower() in ['true', 'on', 1]
@@ -46,6 +47,10 @@ class DevConfig(Config):
     SECRET_KEY = 'hard to guess string'
     MAIL_ADMIN = os.environ.get('MAIL_ADMIN', '1933981377@qq.com')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI') or 'sqlite:///'+os.path.join(basedir, 'dev-database.sqlite')
+
+    @classmethod
+    def init_app(cls, app):
+        print('Development mode')
 
 class ProductConfig(Config):
 

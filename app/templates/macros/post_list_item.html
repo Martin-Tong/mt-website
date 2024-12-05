@@ -1,0 +1,13 @@
+{% macro render_post_item(list, moment) %}
+{% for l in list %}
+<div class="card px-4" name="post_item">
+  <div class="card-body">
+    <h6 class="card-title"><b>{{l.title}}</b></h6>
+    <p class="card-text" style="font-size: smaller">作者：{{l.author.username}}&nbsp;&nbsp;分类：{{l.category.name|default('未分类', True)}}&nbsp;&nbsp;发布日期：{{ moment(l.date).format('LL') }}</p>
+    <a href="{{url_for('post.post_detail', id=l.id, _external=True)}}" class="icon-link icon-link-hover link-underline link-underline-opacity-0 stretched-link">
+        详情<i class="bi bi-arrow-right"></i>
+    </a>
+  </div>
+</div>
+{% endfor %}
+{% endmacro %}

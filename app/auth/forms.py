@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Email, length, Regexp, EqualTo, ValidationError
 
 from app.models import User
@@ -25,3 +25,8 @@ class RegisterForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter_by(email = field.data).first():
             raise ValidationError('邮箱已注册')
+
+class EditProfileForm(FlaskForm):
+    username= StringField('用户名', [length(6,15, message='用户名长度为6-15个字符'), Regexp('^[a-zA-Z][0-9a-zA-Z_.]*$', message='用户名必须以字母开头，只能包含字母数字_.')])
+    about_me = TextAreaField('自我介绍')
+    submit = SubmitField('提交')

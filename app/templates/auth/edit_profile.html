@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}NOC-修改个人信息{% endblock title %}
+
+{% block page_content %}
+<div class="row justify-content-center align-items-center mt-5">
+    <div class="col-lg-6 col-xs-8">
+        <h1 class="mb-3 fs-2">修改个人信息-Edit Profile</h1>
+        <form method="post" id="edit_profile-form" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-floating mb-3">
+                {% if form.errors.get('username') %}
+                {{ form.username(class="form-control is-invalid", placeholder="Username", value=user.username) }}
+                {{ form.username.label() }}
+                <div class="invalid-feedback">
+                    {{ '<br/>'.join(form.errors.get('username'))|safe }}
+                </div>
+                {% else %}
+                {{ form.username(class="form-control", placeholder="Username", value = user.username) }}
+                {{ form.username.label() }}
+                {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+                {% set about_me_error =  form.errors.get('about_me') %}
+                {% if about_me_error %}
+                {# 每次注册失败浏览器刷新会保留表单数据，可以设置input字段 value='' #}
+                {# eg: form.email(class="form-control is-invalid", placeholder="Email", value='') #}
+                {{ form.about_me(class="form-control is-invalid", placeholder="About Me", value=user.about_me) }}
+                {{ form.about_me.label() }}
+                <div class="invalid-feedback">
+                    {{ '<br/>'.join(email_error)|safe }}
+                </div>
+                {% else %}
+                {{ form.about_me(class="form-control", placeholder="About Me", value=user.about_me) }}
+                {{ form.about_me.label() }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.submit(class="btn btn-outline-primary") }}
+                <div class="spinner-border spinner-border-sm visually-hidden mx-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="is-invalid" style="display:inline"></div>
+                <div class="invalid-feedback" id="value-confirm" style="display:inline;visibility:hidden">所有项目必须填写，不能有空值</div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

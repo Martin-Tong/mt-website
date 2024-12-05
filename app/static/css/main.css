@@ -2,13 +2,15 @@
 @import "bootstrap-icons.css";
 
 body {
-    font-family: bootstrap-icons;
+    font-family: bootstrap-icons,"system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, "System Default", serif;
 }
-
 #navbar {
-    height: 8vh;
+    padding: 1.5rem 1rem;
 }
-
+button.navbar-toggler:focus {
+    box-shadow: none;
+}
+/*切换主题颜色按钮*/
 #theme-control button {
     position: relative;
     width: 66px;
@@ -65,6 +67,7 @@ body {
 [data-bs-theme=dark] #scheme-sun, [data-bs-theme=light] #scheme-moon {
     opacity: 1
 }
+/*回到顶部按钮*/
 #gotop {
     position:fixed;
     background-color:var(--bs-dark-bg-subtle);
@@ -88,26 +91,15 @@ body {
 #gotop:hover {
     background-color:var(--bs-dark-border-subtle)
 }
+/*主页底部备案信息*/
 #icp {
     position: fixed;
-    background-color: var(--bs-body-bg);
     bottom: 0;
     padding: 1rem;
 }
 #icp p {
     margin: 0
 }
-@media (prefers-color-scheme:dark) {
-    body,#icp,.form-control {
-        background-color: #212529;
-        border-color: #495057;
-    }
-    [data-bs-theme=light] body, [data-bs-theme=light] #icp, [data-bs-theme=light] .form-control{
-        background-color: #fff;
-        border-color: #495057;
-    }
-}
-
 /*发布文章页css*/
 #publish_post #content {
     display: flex;
@@ -129,28 +121,28 @@ body {
     scrollbar-width: none;
 }
 #publish_post #flask-pagedown-content-preview {
-    padding: 0 0.5rem;
+    padding: 0.5rem;
     white-space: normal;
     word-break: break-word;
     word-wrap: break-word;
 }
 #content .flask-pagedown {
     position: sticky;
-    bottom: 3.5rem;
+    bottom: 4.5rem;
 }
 #post_submit {
     position: sticky;
-    bottom: 1rem;
+    bottom: 0rem;
 }
-@media (prefers-color-scheme: dark) {
-    #publish_post #category {
-        background-color: #212529;
-        border-color: #495057;
-    }
-    [data-bs-theme=light] #publish_post #category {
-        background-color: #fff;
-        border-color: #495057;
-    }
+#post_submit::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1.5rem;
+    top: -1.5rem;
+}
+#post_submit input {
+    margin-bottom: 1rem;
 }
 ::highlight(searchResult) {
     background-color: var(--select-body-bg);
@@ -162,4 +154,87 @@ body {
     display: inline-block;
     margin:0 0.5rem 0 0;
     font-size: 0.8rem;
+}
+[name="post_item"] .card-body {
+    padding-top: 0;
+}
+
+/*主页*/
+.stretched-link i {
+    display: flex;
+    vertical-align: middle;
+}
+[name="post_item"] {
+    border: none;
+}
+/*[title="post_item"]:hover {*/
+/*    border-left: var(--bs-card-border-width) solid var(--bs-card-border-color);*/
+/*}*/
+
+/*修复加载时的闪屏*/
+@media (prefers-color-scheme: dark) {
+    body,
+    #icp,
+    .form-control,
+    #publish_post #category,
+    #post_submit::before,
+    #post_submit,
+    .flask-pagedown,
+    [name="post_item"],
+    #navbarSupportedContent,
+    #paginate a{
+        background-color: #212529;
+        border-color: #495057;
+    }
+    [data-bs-theme=light] #publish_post #category,
+    [data-bs-theme=light] #post_submit::before,
+    [data-bs-theme=light] #post_submit,
+    [data-bs-theme=light] .flask-pagedown,
+    [data-bs-theme=light] body,
+    [data-bs-theme=light] #icp,
+    [data-bs-theme=light] .form-control,
+    [data-bs-theme=light] [name="post_item"],
+    [data-bs-theme=light] #navbarSupportedContent,
+    [data-bs-theme=light] #paginate a{
+        background-color: #fff;
+        border-color: #495057;
+    }
+}
+/*用户资料页*/
+#user_avatar div{
+    position: relative;
+    transition: transform 0.5s ease;
+}
+#user_avatar div::after {
+    content: ' ';
+    background-color: rgba(211,211,211,0.5);
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    padding: 1rem;
+    scale: 0;
+    transition: all 0.5s ease;
+}
+#user_avatar div i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(1.1);
+    color: black;
+    visibility: hidden;
+    font-weight: bolder;
+    font-size: large;
+}
+#user_avatar div:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+#user_avatar div:hover::after {
+    scale: 1;
+}
+#user_avatar div:hover i {
+    visibility: visible;
 }

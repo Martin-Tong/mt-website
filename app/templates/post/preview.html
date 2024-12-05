@@ -3,7 +3,8 @@
 {% block title %}NOC-{{ post.title }}{% endblock title %}
 
 {% block page_content %}
-  <div class="row justify-content-center align-items-center " id="post_detail">
+  <div class="row justify-content-center" id="post_detail">
+    <div class="col-lg-2 col-xs-0"></div>
     <div class="col-lg-8 col-xs-10">
       <div class="mb-3" id="post_body">
         <div class="mb-3" id="post_title">
@@ -11,9 +12,15 @@
           <div class="mb-3" id="post_info">
             <div class="mb-3" id="post_category">
               <p title="分类">
+                {% if post.category.name %}
                 分类:<a class="text-decoration-none text-primary" href="{{ url_for('post.post_category', category=post.category.name, _external=True) }}">
-                {{post.category.name|capitalize|trim}}
+                {{post.category.name|default('未分类', True)|capitalize|trim}}
                 </a>
+                {% else %}
+                分类:<a class="text-decoration-none text-primary" href="javascript:void(0);">
+                {{post.category.name|default('未分类', True)|capitalize|trim}}
+                </a>
+                {%endif%}
               </p>
               <p title="作者">
                 作者:
@@ -35,5 +42,16 @@
         </div>
       </div>
     </div>
+    <div class="col-lg-2 col-xs-0 p-5 d-none d-lg-block">
+      <div id="qrcode_container"></div>
+      <p style="font-size: 0.7rem">扫描二维码分享到手机</p>
+    </div>
   </div>
+
 {% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{ url_for('static', filename = 'js/qrcode.min.js', _external=True) }}" ></script>
+<script src="{{ url_for('static', filename = 'js/preview_page.js', _external=True) }}" ></script>
+{%endblock%}

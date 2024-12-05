@@ -1,26 +1,30 @@
 {% extends 'base.html' %}
-
+{% import 'macros/post_list_item.html' as post_list_item %}
+{% import 'macros/pagination.html' as render_pagination %}
 {% block page_content %}
-<div class="row justify-content-center">
-    <div class="col-lg-2">
+<div class="row justify-content-center user-select-none">
+    <div class="col-lg-2 d-none d-lg-block">
         <div class="position-sticky" style="top:2em">
-            <ul style="list-style:none;padding:0" class="text-center">
-                {% for i in categories %}
-                <li>{{i.name}}<p class="fw-lighter" style="display:inline;font-size:0.8em">共{{i.posts.count()}}篇</p></li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <div class="col-lg-6 position-sticky">
-        <div class="row">
-            <ol style="list-style: none">
-            {% for post in posts %}
-                <li>{{post.title}}</li>
+            {% for i in categories %}
+            <div class="card text-center" name="post_item">
+                <div class="card-body">
+                    <h6 class="card-title"><b>{{i.name}}</b></h6>
+                    <p class="card-text" style="font-size: smaller">共计：{{i.posts.count()}}</p>
+                    <a class="stretched-link" href="{{url_for('post.post_category', category=i.name)}}"></a>
+                </div>
+            </div>
             {% endfor %}
-            </ol>
         </div>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-8">
+        <div class="row">
+        {{post_list_item.render_post_item(posts, moment)}}
+        </div>
+        <div id="paginate" class="my-3 px-4">
+            {{render_pagination.render_pagination(pagination, 'index.homepage')}}
+        </div>
+    </div>
+    <div class="col-lg-2 d-none d-lg-block">
         <div >
             用 let 声明的变量的作用域是最靠近并包含 let 声明的以下花括号闭合语法结构的一个：
             块语句
@@ -44,10 +48,10 @@
 {% endblock %}
 
 {% block footer %}
-    <div id="icp" class="container-fluid">
+    <div id="icp" class="container-fluid" style="z-index: 4">
         <div class="row justify-content-center align-items-center">
             <div class="col-lg-6 col-xs-8">
-                <p class="text-center fw-lighter" style="font-size: 0.8em">本网站已完成备案，备案号<a href="https://beian.miit.gov.cn">豫ICP备2024100525号</a></p>
+                <p class="text-center fw-lighter" style="font-size: 0.8em">本网站已完成备案，备案号<a target="_blank" href="https://beian.miit.gov.cn">豫ICP备2024100525号</a></p>
                 <p class="text-center fw-lighter">
                     <img src="{{url_for('static', filename='static_images/beian.png')}}" width="16px" height="16px">
                     <a href="https://beian.mps.gov.cn/#/query/webSearch?code=33010502012133" rel="noreferrer" target="_blank" style="font-size: 0.8em">浙公网安备33010502012133</a>

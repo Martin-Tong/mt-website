@@ -26,7 +26,12 @@ let check_storage_useful = (() => {
 function change_theme(theme) {
     let scheme_tatget = document.querySelector('html[lang="zh-CN"]')
     scheme_tatget.dataset['bsTheme'] = theme
-    localStorage.setItem('scheme', theme)
+    try {
+        localStorage.setItem('scheme', theme)
+    } catch (e) {
+        console.log(e)
+    }
+
 }
 
 window.addEventListener('DOMContentLoaded', () => {

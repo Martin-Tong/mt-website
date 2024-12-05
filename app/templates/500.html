@@ -1,1 +1,12 @@
-500
+{% extends 'base.html' %}
+
+{% block title %}NOC-服务器错误{% endblock title %}
+
+{% block page_content %}
+<div class="row justify-content-center align-items-center mt-5" style="height: 50vh">
+    <div class="col-lg-8 col-xs-10 text-center">
+        <h3 class="mb-3">服务器内部错误</h3>
+        <p>抱歉！请帮助<a class="alert-link">报告给我们</a>以便解决问题</p>
+    </div>
+</div>
+{% endblock %}

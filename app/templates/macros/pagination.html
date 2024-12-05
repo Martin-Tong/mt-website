@@ -1,0 +1,25 @@
+{% macro render_pagination(paginate, endpoint) %}
+<nav>
+  <ul class="pagination">
+    <li class="page-item {%if not paginate.has_prev %}disabled{% endif%}">
+      <a class="page-link" href="{%if paginate.has_prev %}{{ url_for(endpoint, page = paginate.page-1, **kwargs) }}{%else%}javascript:void(0);{%endif%}">&laquo;</a>
+    </li>
+    {% for p in paginate.iter_pages() %}
+    {% if p %}
+      {%if p == paginate.page%}
+      <li class="page-item active">
+        <a class="page-link" href="{{ url_for(endpoint, page = p, **kwargs) }}">{{p}}</a>
+      </li>
+      {%else%}
+      <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page = p, **kwargs) }}">{{p}}</a></li>
+      {%endif%}
+    {%else%}
+      <li class="page-item disabled"><a class="page-link" href="#">&hellip;</a></li>
+    {%endif%}
+    {%endfor%}
+    <li class="page-item {%if not paginate.has_next %}disabled{% endif%}">
+      <a class="page-link" href="{%if paginate.has_next %}{{ url_for(endpoint, page = paginate.page+1, **kwargs) }}{%else%}javascript:void(0);{%endif%}">&raquo;</a>
+    </li>
+  </ul>
+</nav>
+{% endmacro %}

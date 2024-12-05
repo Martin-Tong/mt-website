@@ -85,11 +85,12 @@ class AnonymousUser(AnonymousUserMixin):
         return False
 
 class Permission:
-    COMMENT = 1 #评论权限
-    FOLLOW = 2 #关注他人权限
-    PUBLIC = 4 #发表文章权限
-    SUPERVISOR = 8 #协助管理权限
-    ADMIN = 16 #管理权限
+    PUBLIC = 1 #发表文章权限
+    COMMENT = 2 #评论权限
+    FOLLOW = 4 #关注他人权限
+    UPLOAD = 8 #上传文件权限
+    SUPERVISOR = 16 #协助管理权限
+    ADMIN = 32 #管理权限
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -110,7 +111,7 @@ class Role(db.Model):
         roles = {
             'User': [Permission.FOLLOW, Permission.PUBLIC, Permission.COMMENT],
             'Supervisor': [Permission.FOLLOW, Permission.COMMENT, Permission.PUBLIC, Permission.SUPERVISOR],
-            'Admin': [Permission.FOLLOW, Permission.ADMIN, Permission.PUBLIC, Permission.COMMENT, Permission.SUPERVISOR]
+            'Admin': [Permission.FOLLOW, Permission.ADMIN, Permission.PUBLIC, Permission.COMMENT, Permission.SUPERVISOR, Permission.UPLOAD]
         }
         default_role = 'User'
         for r in roles:
@@ -156,6 +157,12 @@ class Category(db.Model):
         for i in category_list:
             if not Category.query.filter_by(name = i).first():
                 db.session.add(Category(name = i))
+        db.session.commit()
+
+    @staticmethod
+    def add_category(data):
+        if not Category.query.filter_by(name=data).first():
+            db.session.add(Category(name=data))
         db.session.commit()
 
     def __repr__(self):
