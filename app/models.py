@@ -1,12 +1,12 @@
+import re
 import typing
 from datetime import datetime
-import re
+
 import bleach
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from markdown import markdown
-from unicodedata import category
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login_manager
@@ -67,6 +67,32 @@ class User(UserMixin, db.Model):
         self.confirmed = True
         db.session.add(self)
         return True
+
+    def generate_api_token(self):
+        secret_key = current_app.config['SECRET_KEY']
+        serializer = URLSafeTimedSerializer(secret_key)
+        return serializer.dumps({'user': self.id}, 'api_token')
+
+    @staticmethod
+    def varify_api_token(token):
+        secret_key = current_app.config['SECRET_KEY']
+        serializer = URLSafeTimedSerializer(secret_key)
+        try:
+            data = serializer.loads(token, 3600, salt='register_confirmation')
+        except SignatureExpired:
+            return False
+        return User.query.get(data['user'])
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email' : self.email,
+            'role': getattr(self.role, 'name', 'null'),
+            'register_date': self.register_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'about_me': self.about_me,
+            'confirmed': self.confirmed
+        }
 
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)

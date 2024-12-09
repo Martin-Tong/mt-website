@@ -167,6 +167,12 @@ button.navbar-toggler:focus {
 [name="post_item"] {
     border: none;
 }
+#category-list .card-body {
+    transition: all 0.5s;
+}
+#category-list .card-body:hover {
+    padding-right: 0;
+}
 /*[title="post_item"]:hover {*/
 /*    border-left: var(--bs-card-border-width) solid var(--bs-card-border-color);*/
 /*}*/

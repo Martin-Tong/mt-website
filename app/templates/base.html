@@ -68,7 +68,7 @@
                         </button>
                     </div>
                     </div>
-                    {%if current_user.role.name == 'Admin'%}
+                    {%if current_user.is_authenticated and current_user.role.name == 'Admin'%}
                     <div class="navbar-nav">
                         <div class="nav-item mb-3 mb-lg-0">
                             <a class="nav-link" target="_blank" href="">后台</a>
