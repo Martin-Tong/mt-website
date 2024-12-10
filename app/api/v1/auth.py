@@ -3,9 +3,8 @@ import typing
 from flask import g
 from flask_httpauth import HTTPBasicAuth
 
-from app.api.v1 import api_v1
 from app.models import User
-from .errors import unauthorized, UserValidateError, something_wrong
+from .errors import unauthorized, UserValidateError
 
 auth = HTTPBasicAuth()
 
@@ -26,9 +25,12 @@ def verify_password(user_or_token, password):
     if user_or_token== '':
         return False
     if password == '':
-        user = User.verify_api_token(user_or_token)
-        g.current_user = user
-        g.is_api_token = True
+        try:
+            user = User.varify_api_token(user_or_token)
+            g.current_user = user
+            g.is_api_token = True
+        except Exception:
+            raise UserValidateError('验证码错误')
         return g.current_user is not None
     data = validate_username_or_email(user_or_token)
     if data:
@@ -41,14 +43,3 @@ def verify_password(user_or_token, password):
 @auth.error_handler
 def auth_error():
     return unauthorized('用户登陆不成功')
-
-@api_v1.errorhandler(UserValidateError)
-def user_validate_error(e):
-    return something_wrong(e.args[0])
-
-@api_v1.after_request
-def __after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,cache-control')
-    response.headers.add('cache-control', 'no-cache')
-    return response

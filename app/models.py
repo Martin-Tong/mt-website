@@ -78,7 +78,7 @@ class User(UserMixin, db.Model):
         secret_key = current_app.config['SECRET_KEY']
         serializer = URLSafeTimedSerializer(secret_key)
         try:
-            data = serializer.loads(token, 3600, salt='register_confirmation')
+            data = serializer.loads(token, 3600, salt='api_token')
         except SignatureExpired:
             return False
         return User.query.get(data['user'])
@@ -215,6 +215,16 @@ class Post(db.Model):
                                          email_re=re.compile('^([\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+)$'),
                                          parse_email=True, skip_tags={'pre', 'code'}).linkify(bleach.clean(markdown(value, output_format='html'),
                                                                                                            tags = safe_tags, strip=True))
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'author' : self.author.username,
+            'date': self.date.strftime('%Y-%m-%d %H:%M:%S'),
+            'category': getattr(self.category, 'name', 'null'),
+            'stars': self.stars
+        }
 
 db.event.listen(Post.body_md, 'set', Post.on_change_body_md)
 
