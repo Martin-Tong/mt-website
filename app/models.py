@@ -104,7 +104,7 @@ class User(UserMixin, db.Model):
         return f'<User {self.username}>'
 
 class AnonymousUser(AnonymousUserMixin):
-    def can(self):
+    def can(self, perm):
         return False
 
     def is_admin(self):
@@ -205,6 +205,7 @@ class Post(db.Model):
     last_modify = db.Column(db.DateTime)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     stars = db.Column(db.Integer, default=0)
+    is_public = db.Column(db.Boolean, default=True, index = True)
 
     @staticmethod
     def on_change_body_md(target, value, oldvalue, initiator):

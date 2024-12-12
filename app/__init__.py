@@ -23,7 +23,7 @@ login_manager.anonymous_user = AnonymousUser
 
 def create_app(_config='default'):
     app = Flask(__name__)
-    app.config.from_object(configmap[_config])
+    app.config.from_object(configmap[_config]())
     configmap[_config].init_app(app)
 
     #bootstrap.init_app(app)

@@ -12,9 +12,9 @@
         {%- endblock metas %}
         {%- block styles %}
         <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css', _external=True) }}">
-        <script src="{{ url_for('static', filename = 'js/main.js', _external=True) }}"></script>
-        <script src="{{ url_for('static', filename = 'js/index.js', _external=True) }}" type="module"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
+        <script src="{{ url_for('static', filename = 'js/main.js') }}"></script>
+        <script src="{{ url_for('static', filename = 'js/index.js') }}" type="module"></script>
         {%- endblock styles %}
     {%- endblock head %}
     </head>
@@ -35,9 +35,9 @@
                                 {{ current_user.username }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ url_for('auth._aboutme', user_name = current_user.username) }}">关于我</a></li>
                                 <li><a class="dropdown-item" href="#">信息</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('post.publish') }}">发表文章</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth._aboutme', user_name = current_user.username) }}">个人信息</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for('auth._logout') }}">退出登录</a></li>
                             </ul>

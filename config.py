@@ -5,6 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
 
     def __init__(self):
+        print(self.__class__)
         if self.__class__ == ProductConfig:
             #检查必须设置的隐私项配置
             l = ['SECRET_KEY', 'MAIL_USERNAME', 'MAIL_PASSWORD']
@@ -21,6 +22,7 @@ class Config:
     MAIL_SUBJECT_PREFIX = 'NOC[Not Only Code]'
     MAIL_ADMIN = os.environ.get('MAIL_ADMIN')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    #SEND_FILE_MAX_AGE_DEFAULT = 691200 默认情况下服务器应用发送Cache-Control:no-cache，设置这个配置可以修改默认值为Cache-Control:public, max-age=691200
 
 
     def checkout_attrs(self, targets):
@@ -41,7 +43,7 @@ class Config:
 class DevConfig(Config):
 
     # def __init__(self):
-    #     super().__init__()
+    #     super(DevConfig, self).__init__()
 
     DEBUG = True
     SECRET_KEY = 'hard to guess string'

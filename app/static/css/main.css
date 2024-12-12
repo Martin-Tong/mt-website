@@ -182,6 +182,7 @@ button.navbar-toggler:focus {
     body,
     #icp,
     .form-control,
+    .card,
     #publish_post #category,
     #post_submit::before,
     #post_submit,
@@ -201,7 +202,8 @@ button.navbar-toggler:focus {
     [data-bs-theme=light] .form-control,
     [data-bs-theme=light] [name="post_item"],
     [data-bs-theme=light] #navbarSupportedContent,
-    [data-bs-theme=light] #paginate a{
+    [data-bs-theme=light] #paginate a,
+    [data-bs-theme=light] .card{
         background-color: #fff;
         border-color: #495057;
     }

@@ -16,11 +16,13 @@ def publish():
         title = form.title.data
         body = form.content.data
         category = form.category.data
+        is_public = form.is_public.data
         if category == '未分类':
             category = None
         else:
             category= Category.query.filter_by(name = category).first()
-        _post  = Post(title = title, body_md = body, category = category, author = current_user._get_current_object())
+            print(is_public)
+        _post  = Post(title = title, body_md = body, category = category, author = current_user._get_current_object(), is_public= is_public)
         db.session.add(_post)
         db.session.commit()
         my_flash('发表成功', 'success')

@@ -16,8 +16,14 @@
         {{ form.title(class="form-control", placeholder="请输入标题") }}
         {{ form.title.label() }}
       </div>
-      <div id="select">
-        {{ form.category(class="form-select", title='文章分类') }}
+      <div class="input-group justify-content-between">
+        <div id="select">
+          {{ form.category(class="form-select", title='文章分类') }}
+        </div>
+        <div id="is-public" class="d-flex align-items-center">
+          {{ form.is_public(class="form-check-input") }}
+          {{ form.is_public.label(class="form-check-label") }}
+        </div>
       </div>
       <div class="mb-3" id="content">
         {{ form.content(class="form-control mb-3", placeholder="请输入文章正文", rows="5", spellcheck='false') }}

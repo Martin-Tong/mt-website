@@ -29,10 +29,10 @@
                 </a>
               </p>
               <p title="发布日期">
-                发布日期:&nbsp;{{ moment(post.date).format('LLL')}}
+                发布日期:&nbsp;{{ moment(post.date).format('LL')}}
               </p>
-              <p title="赞赏数">
-                赞赏数:&nbsp;<i class="bi bi-star-fill"></i>&nbsp;{{ post.starts|default(0, True)}}
+              <p title="点赞数">
+                点赞数:&nbsp;<i class="bi bi-star-fill"></i>&nbsp;{{ post.stars|default(0, True)}}
               </p>
             </div>
           </div>

@@ -4,25 +4,58 @@
 
 {% block page_content %}
 <div class="row justify-content-center align-items-center mt-5">
-    <div class="col-lg-6 col-xs-8 row">
-        <div id="user_avatar" class="col-lg-4 col-xs-4 px-4">
-            <div>
-            <img src="{{url_for('static', filename='static_images/noc.png')}}" width="100%" class="rounded-circle">
-            <i class="bi bi-cloud-upload" title="上传头像"></i>
+    <div class="col-lg-8 col-xs-8 row">
+        <div id="detail>" class="row">
+            <div id="user_avatar" class="col-lg-4 col-xs-4 px-4">
+                <div>
+                    <img src="{{url_for('static', filename='static_images/noc.png')}}" width="100%" class="rounded-circle">
+                    <i class="bi bi-cloud-upload" title="上传头像"></i>
+                </div>
             </div>
-        </div>
-        <div id="user_info" class="col-lg-8 col-xs-8">
-            <div>
-                <h4 class="mb-3">{{user.username}}&nbsp;
-                    {%if current_user.id == user.id or current_user.can(63)%}
-                    <a title="修改资料" href="{{url_for('auth.edit_profile', username=user.username )}}" >
-                    <i class="bi bi-pencil-square" style="font-size: 1rem;cursor: pointer"></i>
-                    </a>
-                    {%endif%}
-                </h4>
-                <p>注册日期：{{user.register_date.date()}}</p>
-                <p>已发布文章：{{user.posts.count()}}</p>
-                <p>关于我：{{user.about_me|default('<空>', True)}}</p>
+            <div id="user_info" class="col-lg-8 col-xs-8">
+                <div>
+                    <h4 class="mb-3">{{user.username}}&nbsp;
+                        {%if current_user.id == user.id or current_user.can(63)%}
+                        <a title="修改资料" href="{{url_for('auth.edit_profile', username=user.username )}}" >
+                            <i class="bi bi-pencil-square" style="font-size: 1rem;cursor: pointer"></i>
+                        </a>
+                        {%endif%}
+                    </h4>
+                    <p><label class="fw-bolder">注册日期：</label>{{user.register_date.date()}}</p>
+                    <p><label class="fw-bolder">已发布文章：</label>{{user.posts.count()}}</p>
+                    <p><label class="fw-bolder">关于我：</label>{{user.about_me|default('<空>', True)}}</p>
+                    <div >
+                        <p><label class="fw-bolder">文章列表：</label></p>
+                        <div class="w-100">
+                            {% if current_user.id != user.id %}
+                            {% for i in user.posts.filter_by(is_public=False).all() %}
+                            <div class="card border-0 fw-bolder px-0 ">
+                                <div class="card-body mb-3 p-0 text-truncate">
+                                    <a class="stretched-link link-underline link-underline-opacity-0" href="{{url_for('post.post_detail', _external=True, id=i.id)}}">
+                                        {{i.title}}
+                                    </a>
+                                </div>
+                            </div>
+                            {%endfor%}
+                            {%else%}
+                            {% for i in user.posts.all() %}
+                            <div class="card border-0 fw-bolder px-0 ">
+                                <div class="card-body mb-3 p-0 text-truncate">
+                                    <a class="stretched-link link-underline link-underline-opacity-0" href="{{url_for('post.post_detail', _external=True, id=i.id)}}">
+                                        {%if not i.is_public%}
+                                        <i class="bi bi-unlock-fill" title="公开文章" style="display: contents"></i>
+                                        {%else%}
+                                        <i class="bi bi-lock-fill" title="私密文章" style="display: contents"></i>
+                                        {%endif%}
+                                        {{i.title}}
+                                    </a>
+                                </div>
+                            </div>
+                            {%endfor%}
+                            {%endif%}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,4 +1,5 @@
 {% macro render_pagination(paginate, endpoint) %}
+{%if paginate.pages > 1%}
 <nav>
   <ul class="pagination">
     <li class="page-item {%if not paginate.has_prev %}disabled{% endif%}">
@@ -22,4 +23,5 @@
     </li>
   </ul>
 </nav>
+{%endif%}
 {% endmacro %}

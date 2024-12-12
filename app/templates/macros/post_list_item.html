@@ -1,4 +1,5 @@
 {% macro render_post_item(list, moment) %}
+{%if list.__len__() > 0%}
 {% for l in list %}
 <div class="card px-4" name="post_item">
   <div class="card-body">
@@ -10,4 +11,9 @@
   </div>
 </div>
 {% endfor %}
+{%else%}
+<div>
+  暂时还没有文章····
+</div>
+{%endif%}
 {% endmacro %}

@@ -1,6 +1,6 @@
 import typing
 
-from flask import render_template, request, current_app, g
+from flask import render_template, request, current_app, url_for
 
 from app.index import index
 from app.models import Permission, Post, Category
