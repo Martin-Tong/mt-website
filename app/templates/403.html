@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}NOC-禁止访问{% endblock title %}
+
+{% block page_content %}
+<div class="row justify-content-center align-items-center mt-5" style="height: 50vh">
+    <div class="col-lg-8 col-xs-10 text-center">
+        <h3 class="mb-3">禁止访问</h3>
+        <p>{{e.description.message|default('没有相关权限', True)}}</p>
+    </div>
+</div>
+{% endblock %}

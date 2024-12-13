@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}NOC-编辑文章{% endblock title %}
+
+{%block styles%}
+  {{super()}}
+  <script src="{{ url_for('static', filename = 'js/publish_page.js', _external=True) }}" type="module"></script>
+{%endblock%}
+
+{% block page_content %}
+<div class="row justify-content-center align-items-center mt-5" id="publish_post">
+  <div class="col-lg-8 col-xs-10">
+    <form id="publish-form" method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="form-floating mb-3" id="title">
+        {{ form.title(class="form-control", placeholder="请输入标题") }}
+        {{ form.title.label() }}
+      </div>
+      <div class="input-group justify-content-between">
+        <div id="select">
+          {{ form.category(class="form-select", title='文章分类') }}
+        </div>
+        <div id="is-public" class="d-flex align-items-center">
+          {{ form.is_public(class="form-check-input") }}
+          {{ form.is_public.label(class="form-check-label") }}
+        </div>
+      </div>
+      <div class="mb-3" id="content">
+        {{ form.content(class="form-control mb-3", placeholder="请输入文章正文", rows="5", spellcheck='false') }}
+      </div>
+      <div id="post_submit">
+        {{form.submit(class="btn btn-outline-primary")}}
+      </div>
+    </form>
+  </div>
+</div>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight">
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title" id="offcanvasRightLabel">MarkDown语法提示</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    {% include 'post/_markdown_reminder.html' %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {{ pagedown.include_pagedown() }}
+{% endblock %}

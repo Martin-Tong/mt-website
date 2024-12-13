@@ -150,6 +150,31 @@ button.navbar-toggler:focus {
 }
 
 /*文章预览页*/
+#post_body #post_content pre{
+    background-color: var(--bs-secondary-border-subtle);
+    padding: 1rem;
+    border-radius: 5px;
+    white-space: pre-wrap;
+}
+.post-control-label {
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+}
+.post-control-label a{
+    text-decoration: none;
+}
+.post-control-label i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    font-size: 1.5rem;
+    text-align: center;
+    color: initial;
+}
+.post-control-label i::before {
+    display: block;
+ }
 #post_category p {
     display: inline-block;
     margin:0 0.5rem 0 0;

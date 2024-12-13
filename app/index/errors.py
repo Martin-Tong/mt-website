@@ -8,3 +8,7 @@ def e_404(e):
 @index.app_errorhandler(500)
 def e_500(e):
     return render_template('500.html')
+
+@index.app_errorhandler(403)
+def e_403(e):
+    return render_template('403.html', e=e)

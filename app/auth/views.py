@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, abort
+from flask import render_template, url_for, redirect, abort, request
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app import db
@@ -25,6 +25,9 @@ def _login():
             if user.validate_password(form.password.data):
                 login_user(user, form.remember_me.data)
                 my_flash('登陆成功', 'success')
+                _next = request.args.get('next')
+                if _next:
+                    return redirect(_next)
                 return redirect(url_for('index.homepage'))
             else:
                 my_flash('密码错误', 'danger')

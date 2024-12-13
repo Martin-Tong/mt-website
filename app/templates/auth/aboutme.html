@@ -6,13 +6,13 @@
 <div class="row justify-content-center align-items-center mt-5">
     <div class="col-lg-8 col-xs-8 row">
         <div id="detail>" class="row">
-            <div id="user_avatar" class="col-lg-4 col-xs-4 px-4">
+            <div id="user_avatar" class="col-4 px-4">
                 <div>
                     <img src="{{url_for('static', filename='static_images/noc.png')}}" width="100%" class="rounded-circle">
                     <i class="bi bi-cloud-upload" title="上传头像"></i>
                 </div>
             </div>
-            <div id="user_info" class="col-lg-8 col-xs-8">
+            <div id="user_info" class="col-8">
                 <div>
                     <h4 class="mb-3">{{user.username}}&nbsp;
                         {%if current_user.id == user.id or current_user.can(63)%}

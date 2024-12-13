@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}NOC-{{ post.title }}{% endblock title %}
+{% import 'macros/model.html' as modal%}
 
 {% block page_content %}
   <div class="row justify-content-center" id="post_detail">
@@ -12,15 +13,10 @@
           <div class="mb-3" id="post_info">
             <div class="mb-3" id="post_category">
               <p title="分类">
-                {% if post.category.name %}
-                分类:<a class="text-decoration-none text-primary" href="{{ url_for('post.post_category', category=post.category.name, _external=True) }}">
+                分类:<a class="text-decoration-none text-primary"
+                        href="{% if post.category.name %}{{ url_for('post.post_category', category=post.category.name, _external=True) }}{% else %}javascript:void(0);{%endif%}">
                 {{post.category.name|default('未分类', True)|capitalize|trim}}
                 </a>
-                {% else %}
-                分类:<a class="text-decoration-none text-primary" href="javascript:void(0);">
-                {{post.category.name|default('未分类', True)|capitalize|trim}}
-                </a>
-                {%endif%}
               </p>
               <p title="作者">
                 作者:
@@ -40,18 +36,35 @@
         <div id="post_content">
           {{ post.body_html|safe }}
         </div>
+        <div id="comment">
+        </div>
       </div>
     </div>
-    <div class="col-lg-2 col-xs-0 p-5 d-none d-lg-block">
-      <div id="qrcode_container"></div>
-      <p style="font-size: 0.7rem">扫描二维码分享到手机</p>
+    <div class="col-lg-2 col-xs-0 d-none d-lg-block flex-column">
+      <div id="qrcode" class="p-5">
+        <div id="qrcode_container"></div>
+        <p style="font-size: 0.7rem">扫描二维码分享到手机</p>
+      </div>
+      <div id="post-control" class="position-sticky" style="top: 80%">
+        {%if current_user.is_authenticated and (current_user.id == post.author.id or current_user.can(31))%}
+        <div class="d-flex flex-column align-items-stretch text-body-secondary">
+            <div class="post-control-label mb-3">
+              <a title="编辑" id="edit" href="{{url_for('post.post_edit', id=post.id)}}" style="color: initial"><i class="bi bi-pencil-square"></i></a>
+            </div>
+            <div class="post-control-label mb-3">
+              <a title="删除" id="delete" data-bs-toggle="modal" data-bs-target="#global-modal"><i class="bi bi-trash"></i></a>
+            </div>
+        </div>
+        {%endif%}
+      </div>
     </div>
+    {{modal.render_modal('确认', '是否确认删除该文章')}}
   </div>
 
 {% endblock %}
 
 {% block scripts %}
 {{super()}}
-<script src="{{ url_for('static', filename = 'js/qrcode.min.js', _external=True) }}" ></script>
-<script src="{{ url_for('static', filename = 'js/preview_page.js', _external=True) }}" ></script>
+<script src="{{ url_for('static', filename = 'js/qrcode.min.js') }}" ></script>
+<script src="{{ url_for('static', filename = 'js/preview_page.js') }}" defer></script>
 {%endblock%}
