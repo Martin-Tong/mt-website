@@ -104,6 +104,10 @@ class User(UserMixin, db.Model):
         return f'<User {self.username}>'
 
 class AnonymousUser(AnonymousUserMixin):
+    @property
+    def id(self):
+        return None
+
     def can(self, perm):
         return False
 
@@ -130,6 +134,14 @@ class Role(db.Model):
         super().__init__(**kwargs)
         if not self.permissions:
             self.permissions = 0
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'default' : self.default,
+            'permissions': self.permissions
+        }
 
     #手动初始化所有用户角色
     @staticmethod
@@ -205,7 +217,7 @@ class Post(db.Model):
     last_modify = db.Column(db.DateTime)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     stars = db.Column(db.Integer, default=0)
-    is_public = db.Column(db.Boolean, default=True, index = True)
+    is_public = db.Column(db.Boolean, default=True, index = True) #true表示私密 false表示公开 =_=!
 
     @staticmethod
     def on_change_body_md(target, value, oldvalue, initiator):
@@ -224,7 +236,8 @@ class Post(db.Model):
             'author' : self.author.username,
             'date': self.date.strftime('%Y-%m-%d %H:%M:%S'),
             'category': getattr(self.category, 'name', 'null'),
-            'stars': self.stars
+            'stars': self.stars,
+            'privacy': self.is_public,
         }
 
 db.event.listen(Post.body_md, 'set', Post.on_change_body_md)

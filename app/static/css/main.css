@@ -10,6 +10,16 @@ body {
 button.navbar-toggler:focus {
     box-shadow: none;
 }
+[name = "if-show-control"]::after {
+    content: 'Loading...';
+    background-color: var(--bs-border-color);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+}
 /*切换主题颜色按钮*/
 #theme-control button {
     position: relative;
@@ -214,7 +224,8 @@ button.navbar-toggler:focus {
     .flask-pagedown,
     [name="post_item"],
     #navbarSupportedContent,
-    #paginate a{
+    #paginate a,
+    #notices-homepage #notices-content>div:hover p{
         background-color: #212529;
         border-color: #495057;
     }
@@ -228,7 +239,8 @@ button.navbar-toggler:focus {
     [data-bs-theme=light] [name="post_item"],
     [data-bs-theme=light] #navbarSupportedContent,
     [data-bs-theme=light] #paginate a,
-    [data-bs-theme=light] .card{
+    [data-bs-theme=light] .card,
+    [data-bs-theme=light] #notices-homepage #notices-content>div:hover p{
         background-color: #fff;
         border-color: #495057;
     }
@@ -270,4 +282,58 @@ button.navbar-toggler:focus {
 }
 #user_avatar div:hover i {
     visibility: visible;
+}
+/*速记通用样式-主页右边速记块样式*/
+#notices-content {
+    height: 90%;
+    overflow: hidden;
+}
+#notices-redirect {
+    height: 20%;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+}
+#notices-redirect a {
+    opacity: 0.5;
+}
+#notices-redirect a:hover {
+    opacity: 1;
+}
+#notices-redirect:hover {
+    border-radius: 100% 100% 0 0 ;
+}
+/*速记页独立样式*/
+#notices-input {
+    font-size: 0.9rem;
+}
+#notices-input::placeholder {
+    font-size: 0.8rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#notices-input+button {
+    font-size: 0.8rem;
+}
+#notices-homepage #notices-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+#notices-homepage #notices-content p {
+    text-align: center;
+}
+#notices-homepage #notices-content>div {
+    display: inline-block;
+    cursor: pointer;
+    flex: auto;
+    margin-right: 1rem;
+}
+#notices-homepage #notices-content>div:hover p {
+    transition: all 0.5s ease;
+    transform: scale(1.2);
+    transform-origin: center;
+    /*padding: 0 1rem;*/
 }

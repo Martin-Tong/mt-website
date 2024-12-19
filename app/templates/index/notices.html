@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% import 'macros/post_list_item.html' as post_list_item %}
+{% import 'macros/pagination.html' as render_pagination %}
+{%block title%}NOC-电子烂笔头{%endblock%}
+{% block page_content %}
+<div class="row justify-content-center">
+    <div class="col-10 col-lg-8">
+        <div class="row justify-content-between flex-nowrap flex-column">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="好记性不如烂笔头" id="notices-input">
+                <button class="btn btn-outline-secondary" type="button" id="get-notices">记一下</button>
+            </div>
+            <div class="px-4">
+                <p style="font-size: 0.6rem">**数据默认保存时间为3天，要记在脑子里哦</p>
+            </div>
+        </div>
+        <div class="row" id="notices-homepage">
+            <div id="notices-content" class="animate__animated animate__bounceIn overflow-y-scroll" name="if-show-control" style="position: relative;scrollbar-width: none"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='js/homepage_notices.js')}}"></script>
+{%endblock%}

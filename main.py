@@ -3,14 +3,17 @@ from flask_migrate import Migrate
 from app import create_app, db
 from app.models import User, Role, Post, Category
 
-app = create_app()
-migrate = Migrate(app, db)
+flask_app = create_app()
+celery_app = flask_app.extensions['celery']
 
+# if app.debug == True:
+#     from werkzeug.middleware.profiler import ProfilerMiddleware
+#     flask_app.wsgi_app = ProfilerMiddleware(flask_app.wsgi_app, restrictions=[20])
+migrate = Migrate(flask_app, db)
 # @app.errorhandler(DatabaseError)
 # def special_exception_handler(error):
 #      return 'Database connection failed', 500
-
-@app.shell_context_processor
+@flask_app.shell_context_processor
 def make_shell_context():
     return dict(db=db, User = User, Role = Role, Post= Post, Category = Category)
 

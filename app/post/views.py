@@ -32,6 +32,8 @@ def publish():
 @post.route('/<int:id>')
 def post_detail(id):
     _post = Post.query.get_or_404(id)
+    if _post.is_public == True and current_user.id != _post.author.id:
+        abort(403, {'message':'私密文章'})
     return render_template('post/preview.html', post=_post)
 
 @post.route('/category/<string:category>')
