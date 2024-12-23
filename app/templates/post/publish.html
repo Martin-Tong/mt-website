@@ -4,7 +4,7 @@
 
 {%block styles%}
   {{super()}}
-        <script src="{{ url_for('static', filename = 'js/publish_page.js', _external=True) }}" type="module"></script>
+        <script src="{{ url_for('static', filename = 'js/publish_page.js') }}" type="module"></script>
 {%endblock%}
 
 {% block page_content %}

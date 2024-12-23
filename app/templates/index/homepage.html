@@ -25,9 +25,9 @@
         </div>
     </div>
     <div class="col-lg-3 d-none d-lg-block">
-        <div style="font-size: smaller;overflow: hidden" class="shadow h-50">
+        <div style="font-size: smaller;overflow: hidden;height: 50vh" class="shadow">
         <!--速记区域-->
-            <div id="notices-content" class="p-3" name="if-show-control" style="position: relative"></div>
+            <div id="notices-content" class="p-3 overflow-y-scroll" name="if-show-control" style="position: relative;scrollbar-width: none"></div>
             <div id="notices-redirect" class="shadow-lg">
                 <a href="{{url_for('index.notices')}}" style="color: initial" title="前往速记页">
                     <i class="bi bi-box-arrow-up-right" style="font-size: 1.5rem"></i>

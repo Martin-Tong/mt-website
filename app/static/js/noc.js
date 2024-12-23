@@ -93,7 +93,17 @@ function noc_highlight(target) {
         const searchResult = new Highlight(...ranges.flat())
         CSS.highlights.set('searchResult', searchResult)
     }
-
 }
 
-export {gotop_arrow, noc_alert, noc_highlight}
+function get_system_messages(index=null, fn) {
+    fetch(location.origin+`/messages/${index}`, {
+        headers: {
+            'N-From-Fetch': 1
+        }
+    }).then((res) => {return res.json()}).then((res) => {
+        console.log(res)
+        fn(res)
+    })
+}
+
+export {gotop_arrow, noc_alert, noc_highlight, get_system_messages}

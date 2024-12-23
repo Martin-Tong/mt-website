@@ -308,6 +308,7 @@ button.navbar-toggler:focus {
 /*速记页独立样式*/
 #notices-input {
     font-size: 0.9rem;
+    position: relative;
 }
 #notices-input::placeholder {
     font-size: 0.8rem;
@@ -316,6 +317,13 @@ button.navbar-toggler:focus {
     transform: translateY(-50%);
 }
 #notices-input+button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.5rem;
+    font-size: 0.8rem;
+}
+#get-notices {
     font-size: 0.8rem;
 }
 #notices-homepage #notices-content {

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, jsonify, abort
+from flask import render_template, redirect, url_for, jsonify, abort, current_app, request
 from flask_login import login_required, current_user
 
 from app import db
@@ -38,7 +38,13 @@ def post_detail(id):
 
 @post.route('/category/<string:category>')
 def post_category(category):
-    pass
+    page = request.args.get('page', 1, type=int)
+    _category = Category.query.filter_by(name = category).first()
+    posts = _category.posts.filter(Post.is_public != True).order_by(Post.date.desc()).paginate(page=page,
+                                                                  per_page=current_app.config['POSTS_PER_PAGE'],
+                                                                  max_per_page=current_app.config['POSTS_PER_PAGE'],
+                                                            error_out=True)
+    return render_template('post/categoried.html', posts = posts.items, category = category, pagination = posts)
 
 
 @post.route('/<int:id>/edit', methods = ['GET', 'POST'])

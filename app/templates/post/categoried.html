@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% import 'macros/post_list_item.html' as render_posts %}
+{% import 'macros/pagination.html' as render_pagination %}
+{% block title %}NOC-{{category}}{% endblock title %}
+
+{% block page_content %}
+<div class="row justify-content-center align-items-center mt-5">
+    <div class="col-lg-8 col-10">
+        {{render_posts.render_post_item(posts, moment)}}
+    </div>
+    <div id="paginate" class="my-3 px-5 col-lg-8 col-10">
+        {{render_pagination.render_pagination(pagination, 'post.post_category', category = category)}}
+    </div>
+</div>
+{% endblock %}

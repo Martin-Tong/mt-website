@@ -1,7 +1,15 @@
+import typing
+
+from celery.schedules import crontab
 from flask_migrate import Migrate
 
 from app import create_app, db
 from app.models import User, Role, Post, Category
+from app.tools.tasks import ask_for_confirm
+
+if typing.TYPE_CHECKING:
+    from celery import Celery
+    celery_app = Celery
 
 flask_app = create_app()
 celery_app = flask_app.extensions['celery']
@@ -24,3 +32,7 @@ def make_shell_context():
 #     # Role.insert_roles()
 #     # Category.insert_categories()
 #     print('initial')
+
+@celery_app.on_after_finalize.connect
+def schedule_task(sender, **kwargs):
+    sender.add_periodic_task(crontab(minute='0', hour='0'), ask_for_confirm.s(),args=(2,))

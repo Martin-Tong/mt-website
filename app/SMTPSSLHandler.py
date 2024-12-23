@@ -1,8 +1,8 @@
+import logging
 from logging.handlers import SMTPHandler
 import time
 from threading import Thread
-
-from sqlalchemy.sql.base import elements
+from flask import has_request_context, request
 
 
 class SMTPSSLHandler(SMTPHandler):
@@ -49,3 +49,13 @@ class SMTPSSLHandler(SMTPHandler):
             smtp.quit()
         except Exception:
             self.handleError(record)
+
+class SMTPHandlerFormater(logging.Formatter):
+    def format(self, record):
+        if has_request_context():
+            record.url = request.url
+            record.remote_addr = request.remote_addr
+        else:
+            record.url = None
+            record.remote_addr = None
+        return super().format(record)

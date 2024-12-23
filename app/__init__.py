@@ -5,6 +5,7 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_pagedown import PageDown
 from flask_sqlalchemy import SQLAlchemy
+from flask_caching import Cache
 from celery import Celery,Task
 from config import config as configmap
 from redis import Redis
@@ -14,6 +15,7 @@ db = SQLAlchemy()
 mail: Mail = Mail()
 moment: Moment = Moment()
 pagedown: PageDown = PageDown()
+cache: Cache = Cache()
 login_manager: LoginManager = LoginManager()
 login_manager.login_view = 'auth._login'
 login_manager.login_message = '该页面/功能需要登录'
@@ -33,10 +35,17 @@ def create_app(_config='default'):
     mail.init_app(app)
     moment.init_app(app)
     pagedown.init_app(app)
+    cache.init_app(app, config={
+        'CACHE_TYPE':'RedisCache',
+        'CACHE_REDIS_HOST':app.config['REDIS_HOST'],
+        'CACHE_REDIS_PORT':app.config['REDIS_PORT'],
+        'CACHE_REDIS_PASSWORD':app.config['REDIS_PASSWORD'],
+        'CACHE_REDIS_DB': 3,
+    })
     login_manager.init_app(app)
 
-    create_celery_app(app)
     create_redis(app)
+    create_celery_app(app)
     #注册蓝图
     from .index import index as index_blueprint
     app.register_blueprint(index_blueprint)
@@ -63,7 +72,7 @@ def create_celery_app(app:Flask):
     celery_app.conf.broker_connection_retry_on_startup = True
     celery_app.conf.broker_url = app.config['CELERY_BROKER_URI']
     celery_app.conf.result_backend = app.config['CELERY_RESULT_BACKEND']
-    celery_app.task_ignore_result = app.config['CELERY_TASK_IGNORE_RESULT']
+    celery_app.conf.task_ignore_result = app.config['CELERY_TASK_IGNORE_RESULT']
     celery_app.conf.result_backend_transport_options = {
         'global_keyprefix':'noc'
     }
@@ -72,6 +81,7 @@ def create_celery_app(app:Flask):
 
     return celery_app
 
+'''0：celery事件；1：notices；2：messages；3：cache'''
 def create_redis(app:Flask):
     def _redis(db):
         """Create redis app."""
