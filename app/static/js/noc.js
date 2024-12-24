@@ -30,22 +30,19 @@ const CATEGORY_TYPES = {
 
 let noc_alert = (() => {
     let length = 0;
-    return function noc_alter(message, category = CATEGORY_TYPES.PRIMARY, max_length = 3) {
-        (() => {
-            let alert_place = document.querySelector('#alert-placeholder')
-            category = CATEGORY_TYPES[category] || category;
-            let inner_html = `
-                <div class="alert alert-${category} alert-dismissible fade show" role="alert" id="noc-alert-${length}">
+    return function noc_alter(message, category = CATEGORY_TYPES.PRIMARY, fixed = false, max_length = 3) {
+        let alert_place = document.querySelector('#alert-placeholder')
+        category = CATEGORY_TYPES[category] || category;
+        let inner_html = `
+                <div class="alert alert-${category} alert-dismissible fade show ${fixed?'fixed':''}" role="alert" id="noc-alert-${length}">
                     <strong>${message}!</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>`
-            if(length < max_length) {
-                length++
-            } else {
-                alert_place.removeChild(alert_place.firstElementChild)
-            }
-            alert_place.innerHTML = alert_place.innerHTML.concat(inner_html)
-        })()
+        if(alert_place.hasChildNodes() && alert_place.childElementCount >= max_length) {
+            alert_place.removeChild(alert_place.firstElementChild)
+        }
+        length += 1
+        alert_place.innerHTML = alert_place.innerHTML.concat(inner_html)
     }
 })()
 

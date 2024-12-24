@@ -142,7 +142,7 @@ button.navbar-toggler:focus {
 }
 #post_submit {
     position: sticky;
-    bottom: 0rem;
+    bottom: 0;
 }
 #post_submit::before {
     content: '';
@@ -193,7 +193,22 @@ button.navbar-toggler:focus {
 [name="post_item"] .card-body {
     padding-top: 0;
 }
-
+#comment-input {
+    padding-right: 15%;
+}
+#comment-input+button {
+    position: absolute;
+    right: 3%;
+    bottom: 0;
+}
+#noc-emoji {
+    position: absolute;
+    top: 0;
+    right: 3%;
+}
+.comment-time {
+    font-size: 0.8rem;
+}
 /*主页*/
 .stretched-link i {
     display: flex;

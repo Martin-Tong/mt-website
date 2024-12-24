@@ -21,18 +21,13 @@ if typing.TYPE_CHECKING:
 def make_homepage_key():
    user_data = request.args.get('page', 1, type=int)
    return f'view-noc-homepage-cache-with-args-{user_data}'
-# @index.after_app_request
-# def remove_server_header(response):
-#     response.headers.pop('server', None)
-#     print(response.headers)
-#     return response
+
 @index.app_context_processor
 def define_permission_context():
     return dict(Permission = Permission)
 
-
 @index.route('/', methods=['GET'])
-@cache.cached(timeout=60, make_cache_key=make_homepage_key)
+#@cache.cached(timeout=60, make_cache_key=make_homepage_key)
 def homepage():
     page = request.args.get('page', 1, type=int)
     posts:_posts = Post.query.filter(Post.is_public != True).order_by(Post.date.desc()).paginate(page=page,
@@ -49,14 +44,12 @@ def homepage():
 def notices():
     return render_template('/index/notices.html')
 
-
 @index.route('/notices', methods=['GET'])
 def get_notices():
     rd:_redis = current_app.extensions['redis'](1)
     keys = rd.keys('*')
     result = [rd.hgetall(i) for i in keys]
     return jsonify(result)
-
 
 @index.post('/notices')
 @login_required

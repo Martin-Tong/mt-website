@@ -1,0 +1,79 @@
+{% import 'macros/emojis.html' as emoji  %}
+{%cache 60*60*24*365,'noc-emoji'%}
+<div id="emoji-picker-container">
+  <button class="btn" id="emoji-picker-button">😀</button>
+  <div id="emoji-picker" class="hidden shadow">
+      {{emoji.generate_emoji()}}
+  </div>
+<style>
+#emoji-picker-container {
+  position: relative;
+  display: inline-block;
+}
+#emoji-picker-button {
+  font-size: 24px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+    #emoji-picker {
+        width: 90vw;
+    }
+}
+@media (min-width: 992px) {
+    #emoji-picker {
+        width: 50vw;
+    }
+}
+#emoji-picker {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  z-index: 1000;
+}
+#emoji-picker.hidden {
+  display: none;
+}
+.emoji {
+  font-size: 24px;
+  padding: 5px;
+  cursor: pointer;
+}
+.emoji:hover {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const emojiPickerButton = document.getElementById('emoji-picker-button');
+  const emojiPicker = document.getElementById('emoji-picker');
+
+  emojiPickerButton.addEventListener('click', () => {
+    emojiPicker.classList.toggle('hidden');
+  });
+
+  emojiPicker.addEventListener('click', (event) => {
+    if (event.target.classList.contains('emoji')) {
+      const selectedEmoji = event.target.textContent;
+      emojiPickerButton.textContent = selectedEmoji;
+      emojiPicker.classList.add('hidden');
+    }
+    const emojiSelected = new CustomEvent('emojiSelected', { detail: { emoji: event.target.textContent } });
+    const target = document.querySelector('[data-emoji-target]');
+    target.dispatchEvent(emojiSelected);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!emojiPicker.contains(event.target) && event.target !== emojiPickerButton) {
+      emojiPicker.classList.add('hidden');
+    }
+  });
+});
+</script>
+</div>
+{%endcache%}

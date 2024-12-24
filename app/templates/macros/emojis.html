@@ -1,0 +1,11 @@
+{%macro generate_emoji()%}
+{%for i in range(128512, 128580)%}
+<div class="emoji" data-emoji-id="{{i}}">&#{{ i }};</div>
+{%endfor%}
+{%for i in range(129296, 129349)%}
+<div class="emoji" data-emoji-id="{{i}}">&#{{ i }};</div>
+{%endfor%}
+{%for i in range(129351, 129372)%}
+<div class="emoji" data-emoji-id="{{i}}">&#{{ i }};</div>
+{%endfor%}
+{%endmacro%}

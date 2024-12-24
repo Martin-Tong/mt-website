@@ -110,12 +110,17 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     let target = document.querySelector('#notices-content')
     let _input = document.querySelector('#notices-input')
     let _clear = document.querySelector('#notices-input-clear')
+    let button = document.querySelector('#get-notices')
     let data = await get_notices()
     let _timeout = setTimeout(()=>{
         target.removeAttribute('name')
         clearTimeout(_timeout)
     }, 500)
     if (_input) {
+        if (noc_user_status) {
+            _input.removeAttribute('disabled')
+            button.removeAttribute('disabled')
+        }
         add_notices()
         _input.oninput = input_behavior
         _clear.onclick = input_clear_behavior

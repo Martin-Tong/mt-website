@@ -2,4 +2,4 @@ from flask import Blueprint
 
 post = Blueprint('post', __name__)
 
-from app.post import views
+from app.post import views, comments

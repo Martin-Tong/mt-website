@@ -33,10 +33,20 @@
             </div>
           </div>
         </div>
-        <div id="post_content">
+        <div id="post_content" class="mb-3">
           {{ post.body_html|safe }}
         </div>
-        <div id="comment">
+        <div id="comment_content">
+          <div style="position: relative" class="mb-3">
+            <textarea id="comment-input" placeholder="评论" class="form-control" rows="3" style="resize: none" data-emoji-target></textarea>
+            <button class="btn">提交</button>
+            <div id="noc-emoji">
+              {%include 'includes/_emoji.html'%}
+            </div>
+          </div>
+          <div id="comment">
+
+          </div>
         </div>
       </div>
     </div>
@@ -60,11 +70,13 @@
     </div>
     {{modal.render_modal('确认', '是否确认删除该文章')}}
   </div>
-
 {% endblock %}
 
 {% block scripts %}
 {{super()}}
+<script>
+var noc_post = {{ post.to_json()|tojson }};
+</script>
 <script src="{{ url_for('static', filename = 'js/qrcode.min.js') }}" ></script>
 <script src="{{ url_for('static', filename = 'js/preview_page.js') }}" defer></script>
 {%endblock%}
