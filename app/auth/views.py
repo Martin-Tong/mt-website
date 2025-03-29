@@ -74,6 +74,14 @@ def _confirm(token):
         my_flash('链接已过期或链接不一致，请重新发起验证', 'danger')
     return redirect(url_for('index.homepage'))
 
+@auth.get('/confirm')
+@login_required
+def _reconfirm():
+    token = current_user.generate_validate_token()
+    send_mail(current_user.email, '请确认你在NOC注册的邮箱地址', 'email/confirm', token = token, user = current_user)
+    my_flash('确认邮件已经发到你的注册邮箱地址，请前往确认', 'success')
+    return redirect(url_for('index.homepage'))
+
 @auth.route('/edit-profile/<username>', methods = ['GET', 'POST'])
 @login_required
 def edit_profile(username):

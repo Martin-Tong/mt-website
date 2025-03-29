@@ -10,6 +10,15 @@ body {
 button.navbar-toggler:focus {
     box-shadow: none;
 }
+[data-has-message = 'true']::before {
+    content: '';
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 100%;
+    background-color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    right: calc(var(--bs-navbar-nav-link-padding-x)* 2);
+}
 [name = "if-show-control"]::after {
     content: 'Loading...';
     background-color: var(--bs-border-color);
@@ -157,6 +166,13 @@ button.navbar-toggler:focus {
 ::highlight(searchResult) {
     background-color: var(--select-body-bg);
     color: var(--select-body-color);
+}
+#flask-pagedown-content-preview img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--bs-secondary-border-subtle);
+    border-radius: 5px;
+    object-fit: cover;
 }
 
 /*文章预览页*/
@@ -359,4 +375,9 @@ button.navbar-toggler:focus {
     transform: scale(1.2);
     transform-origin: center;
     /*padding: 0 1rem;*/
+}
+/*消息页*/
+.message-item a {
+    color: var(--bs-body-color);
+    text-decoration: none;
 }

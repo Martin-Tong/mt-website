@@ -48,12 +48,64 @@ function lock_mousedown(e) {
     }
 }
 
-//锁定时组织tab、alt键切换聚焦状态
+//锁定时阻止tab、alt键切换聚焦状态以及其他快捷键
 function lock_keydown(e) {
     if (['Tab', 'Alt'].indexOf(e.key) != -1) {
         e.preventDefault()
         e.stopPropagation()
+        if (e.key == 'Tab') {
+            let target = document.querySelector("#flask-pagedown-content")
+            target.value += '    '
+        }
+    } else  {
+        if (e.ctrlKey && e.key.toLocaleLowerCase() == 'i') {
+            upload_image(e)
+        }
     }
+}
+// 上传图片
+function upload_image(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    let _input = document.createElement('input')
+    _input.type = 'file'
+    _input.accept = 'image/png, image/jpeg, image/gif, image/jpg'
+    _input.addEventListener('change', (e) => {
+        let file = e.target.files[0]
+        let formdata = new FormData()
+        let xhr = new XMLHttpRequest()
+        formdata.append('file', file)
+        xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+                let _progress = document.querySelector('#flask-pagedown-upload-progress')
+                _progress.style.width = `${e.loaded / e.total * 100}%`
+            }
+        })
+        xhr.onload = (e) => {
+            let _content = document.querySelector('#flask-pagedown-content')
+            let _progress = document.querySelector('#flask-pagedown-upload-progress')
+            _progress.style.width = 0
+            let _start = _content.selectionStart
+            let _end = _content.selectionEnd
+            let _value = _content.value
+            _content.value = _value.slice(0, _start) + `\n\n![${file.name}](`+JSON.parse(e.target.response).path+')\n\n' + _value.slice(_end)
+            _input = null
+            xhr = null
+        }
+        xhr.withCredentials = true
+        xhr.open('POST', 'http://127.0.0.1:5555/upload/', true)
+        xhr.send(formdata)
+    })
+    _input.addEventListener('cancel', (e) => {
+      _input = null
+    })
+    _input.addEventListener('error', (e) => {
+        _input = null
+    })
+    _input.addEventListener('abort', (e) => {
+        _input = null
+    })
+    _input.click()
 }
 //点击🔒按钮事件
 function lock_event(e) {

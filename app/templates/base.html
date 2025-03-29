@@ -11,7 +11,7 @@
         <link rel="icon" href="{{ url_for('static', filename='static_images/favicon.ico') }}">
         {%- endblock metas %}
         {%- block styles %}
-        <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/animate.min.css') }}">
         <script src="{{ url_for('static', filename = 'js/main.js') }}"></script>
@@ -32,11 +32,11 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         {% if current_user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a id="noc-user-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ current_user.username }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">信息</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('message.message') }}" id="noc-sys-message">信息</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('post.publish') }}">发表文章</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('auth._aboutme', user_name = current_user.username) }}">个人信息</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -91,6 +91,7 @@
             {% endfor %}
             </div>
             <button class="d-none d-lg-block bd-body-subtle" id="gotop"></button>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-placeholder"></div>
             {% block page_content %}{% endblock %}
         </div>
         {%- endblock content %}

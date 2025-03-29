@@ -28,6 +28,30 @@ const CATEGORY_TYPES = {
     WARNING: 'warning',
 };
 
+let noc_toast = (() => {
+    let length = 0;
+    return function not_toast(message, category = CATEGORY_TYPES.PRIMARY, max_length = 3) {
+        let toast_place = document.querySelector('#toast-placeholder')
+        category = CATEGORY_TYPES[category] || category;
+        let inner_html = `
+            <div class="toast align-items-center text-white bg-${category} border-0" id="noc-toast-${length}">
+               <div class="toast-header bg-${category}">
+                  <strong class="me-auto">新的系统信息</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+               </div>
+               <div class="toast-body text-truncate">
+                   ${message}
+               </div>
+            </div>`
+        if(toast_place.hasChildNodes() && toast_place.childElementCount >= max_length) {
+            toast_place.removeChild(toast_place.firstElementChild)
+        }
+        length += 1
+        toast_place.innerHTML = toast_place.innerHTML.concat(inner_html)
+        let toast = new bootstrap.Toast(document.querySelector(`#noc-toast-${length-1}`))
+        toast.show()
+    }
+})()
 let noc_alert = (() => {
     let length = 0;
     return function noc_alter(message, category = CATEGORY_TYPES.PRIMARY, fixed = false, max_length = 3) {
@@ -92,15 +116,78 @@ function noc_highlight(target) {
     }
 }
 
-function get_system_messages(index=null, fn) {
-    fetch(location.origin+`/messages/${index}`, {
+ async function get_system_messages() {
+     let _i = await fetch(location.origin+`/messages`, {
         headers: {
             'N-From-Fetch': 1
-        }
-    }).then((res) => {return res.json()}).then((res) => {
-        console.log(res)
-        fn(res)
+        },
+        withCredentials: 'same-origin'
     })
+     return await _i.json()
 }
 
-export {gotop_arrow, noc_alert, noc_highlight, get_system_messages}
+class SystemMessage {
+    constructor(message) {
+        this.message = message
+    }
+    static async init() {
+        let _data = sessionStorage.getItem('system_message')
+        if (_data) {
+            return new SystemMessage(JSON.parse(_data))
+        }
+        let data = await get_system_messages()
+        if (data.status === 'success') {
+            let _i = new SystemMessage(data.message)
+            _i.setLocalCache(data.message)
+            return _i
+        }
+        return new SystemMessage('null')
+    }
+    setLocalCache(data) {
+        let _origin = sessionStorage.getItem('system_message')
+        if (!_origin || JSON.stringify(data) !== _origin) {
+            _origin = _origin || '{}'
+            let _keys = Object.keys(data)
+            let _diff = _keys.filter((key) => {
+                return !Object.keys(JSON.parse(_origin)).includes(key)
+            })
+            noc_toast(`您有${_diff.length}条新的系统消息`, 'primary')
+        }
+        sessionStorage.setItem('system_message', JSON.stringify(data))
+        this.message = data
+        return this
+    }
+    clearLocalCache() {
+        sessionStorage.removeItem('system_message')
+        this.message = 'null'
+        return this
+    }
+    updateLocalCache() {
+        let _this = this
+        setInterval(async () => {
+            let data = await get_system_messages()
+            if (data.status === 'success') {
+                _this.setLocalCache(data.message)
+            } else {
+                _this.clearLocalCache()
+            }
+            _this.handle()
+        }, 1000*30)
+    }
+    // 处理消息
+    handle() {
+        let _inner = document.querySelector('#noc-sys-message')
+        let _outer = document.querySelector('#noc-user-dropdown')
+        let _html = '信息'
+        if (this.message !== 'null') {
+            let _length = Object.keys(this.message).length
+            _inner.innerHTML = _html.concat(`&nbsp;&nbsp;<span class="badge text-bg-primary rounded-pill">${_length}</span>`)
+            _outer.dataset.hasMessage = 'true'
+        } else {
+            _inner.innerHTML = _html
+            _outer.dataset.hasMessage = 'false'
+        }
+    }
+}
+
+export {gotop_arrow, noc_alert, noc_toast, noc_highlight, SystemMessage}

@@ -1,3 +1,11 @@
+/**
+ * Debounce function to delay the execution of a function until after a specified wait time has elapsed
+ * since the last time it was invoked.
+ *
+ * @param {Function} fn - The function to be debounced.
+ * @param {number} wait - The time interval in milliseconds to wait before invoking the function.
+ * @returns {Function} - A debounced version of the input function.
+ */
 function debounce(fn, wait) {
     let timeout = null
     return function() {
@@ -8,7 +16,13 @@ function debounce(fn, wait) {
     }
 
 }
-
+/**
+ * Throttle function to limit the execution of a function to once every specified time interval.
+ *
+ * @param {Function} fn - The function to be throttled.
+ * @param {number} wait - The time interval in milliseconds to wait before allowing the function to be called again.
+ * @returns {Function} - A throttled version of the input function.
+ */
 function throttle(fn, wait) {
     let controller
     return function() {

@@ -26,7 +26,26 @@
         </div>
       </div>
       <div class="mb-3" id="content">
-        {{ form.content(class="form-control mb-3", placeholder="请输入文章正文", rows="5", spellcheck='false') }}
+        <div class="progress" style="height: 1px;top: -8px;position: relative;z-index: 9999;background-color: transparent">
+          <div class="progress-bar" id="flask-pagedown-upload-progress"></div>
+        </div>
+        {{ form.content(class="form-control mb-3", placeholder="请输入文章正文(锁定模式下ctrl+i上传图片)", rows="5", spellcheck='false', only_input=True) }}
+        <div class="flask-pagedown-preview" id="flask-pagedown-content-preview"></div>
+        <script type="text/javascript">
+          f =function() {
+            if (typeof flask_pagedown_converter ==="undefined") flask_pagedown_converter =Markdown.getSanitizingConverter().makeHtml;
+            var textarea =document.getElementById("flask-pagedown-content");
+            var preview =document.getElementById("flask-pagedown-content-preview");
+            textarea.onkeyup =function() {preview.innerHTML =flask_pagedown_converter(textarea.value);}
+            textarea.onkeyup.call(textarea);
+          }
+          if (document.readyState ==='complete') f();
+          else if (window.addEventListener)
+          window.addEventListener("load",f,false);
+          else if (window.attachEvent)
+          window.attachEvent("onload",f);
+          else f();
+        </script>
       </div>
       <div id="post_submit">
         {{form.submit(class="btn btn-outline-primary")}}

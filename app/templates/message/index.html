@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}NOC-消息{% endblock title %}
+
+{% block page_content %}
+<div class="row justify-content-center align-items-center mt-5">
+    {%if not data%}
+    <div class="col-12 text-center">
+        <h1 class="fs-5">没有消息</h1>
+    </div>
+    {%else%}
+    <div class="col-lg-8 col-10">
+<!--        <div class="row mb-3">-->
+<!--            <div>-->
+<!--                <input type="checkbox" id="message-select-all" class="d-inline"/>-->
+<!--                <label for="message-select-all" class="col-12 d-inline" >全选</label>-->
+<!--            </div>-->
+<!--        </div>-->
+        {% for i,v in enumerate(data.keys()) %}
+            {% if v == 'confirmed' %}
+            <div class="row mb-3">
+                <div class="message-item">
+<!--                    <input type="checkbox" class="d-inline me-1">-->
+<!--                    <span><i class="bi bi-envelope"></i></span>-->
+                    <a class="mb-2 d-inline" data-bs-toggle="collapse" href="#collapse-{{i}}">当前注册的邮箱没有激活</a>
+                </div>
+                <div class="collapse message-body" id="collapse-{{i}}">
+                    <div class="card card-body border-0">
+                        <p>部分功能需要账号完成邮箱验证，请重新验证你的邮箱！(如已验证，请忽略！)</p>
+                        <p><a href="{{url_for('auth._reconfirm')}}">重新发送验证信息</a></p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="row mb-3">
+                <div class="message-item">
+<!--                    <input type="checkbox" class="d-inline me-1">-->
+<!--                    <span title="未读"><i class="bi bi-envelope"></i></span>-->
+                    <a class="mb-2 d-inline text-truncate" data-bs-toggle="collapse" href="#collapse-{{i}}">{{v|safe}}</a>
+                </div>
+                <div class="collapse message-body" id="collapse-{{i}}">
+                    <div class="card card-body border-0">
+                        {{data[v]|safe}}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+<!--        <div class="row mb-3">-->
+<!--            <div>-->
+<!--                <button class="btn btn-sm btn-secondary">全部已读</button>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+    {%endif%}
+</div>
+{% endblock %}
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='js/message_page.js')}}"></script>
+<script>
+    {%if data%}
+        sessionStorage.setItem('system_message', JSON.stringify({{data|tojson}}));
+    {%endif%}
+</script>
+{%endblock%}
